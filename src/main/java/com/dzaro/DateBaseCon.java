@@ -6,16 +6,15 @@ import java.util.*;
 
 class DateBaseCon {
 
-    // Użycie stałych private static final
     // Poczyta o static i jak działa w klasach i obiektach
 
     private static final String DB_URL = "jdbc:postgresql:meals_db";
-    private String USER = "postgres";
-    private String PASS = "1111";
+    private static final String USER = "postgres";
+    private static final String PASS = "1111";
 
     private int meal_id = 0;
-    Connection connection; // private
-    Statement statement; // private
+    private Connection connection;
+    private Statement statement;
 
 
     // Można te listy zastąpić enum
@@ -34,8 +33,8 @@ class DateBaseCon {
     }
 
     // final
-    private List<String> dayOfTheWeek = List.of("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
-    private List<String> category = List.of("breakfast", "lunch" ,"dinner");
+    private final List<String> dayOfTheWeek = List.of("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
+    private final List<String> category = List.of("breakfast", "lunch" ,"dinner");
 
     public DateBaseCon()  {
         try {
@@ -123,19 +122,6 @@ class DateBaseCon {
         meal_id++;
 
     }
-/*
-    public boolean checkEmpty() throws SQLException {
-        int mealIDSelect = 0;
-        ResultSet mealID = statement.executeQuery("SELECT meal_id FROM meals");
-        while (mealID.next()) {
-            mealIDSelect = mealID.getInt("meal_id");
-
-        }
-
-        return mealIDSelect < 1;
-    }
-
- */
 
     // Inna nazwa, nazwa musi opisywać co robi metoda np. hasCategoryMeals(category)
     public boolean checkEmpty(String category) throws SQLException {
@@ -193,6 +179,7 @@ class DateBaseCon {
         }
     }
     */
+
 
     public void addPlan() throws SQLException {
         // Rozbicie dużej metody
@@ -352,16 +339,6 @@ class DateBaseCon {
                 ingredientsMap.put(ingredients,1);
             }
         }
-            /*
-            if(ingredientsMap.containsKey(ingredientsRS.getString("ingredient"))) {
-                int value = ingredientsMap.get(ingredientsRS.getString("ingredient"));
-                ingredientsMap.put(ingredientsRS.getString("ingredient"),++value);
-
-            } else {
-                ingredientsMap.put(ingredientsRS.getString("ingredient"),1);
-            }
-
-             */
 
 
         return ingredientsMap;
@@ -374,60 +351,6 @@ class DateBaseCon {
 
 
 }
-    /*
-
-    public void showSQL() throws SQLException {
-
-        int mealIDSelect = 0;
-        ResultSet mealID = statement.executeQuery("SELECT meal_id FROM meals");
-        while (mealID.next()) {
-            mealIDSelect = mealID.getInt("meal_id");
-
-        }
-        int i = 1;
-        while (i <= mealIDSelect) {
-            System.out.println("meal ID: " + i);
-            ResultSet mealRS = statement.executeQuery("SELECT * FROM meals WHERE meal_id = " + i);
-            // Read the result set
-            while (mealRS.next()) {
-                System.out.println("Category: " + mealRS.getString("category"));
-                System.out.println("Name: " + mealRS.getString("meal"));
-            }
-
-            ResultSet ingredientsRS = statement.executeQuery("SELECT * FROM ingredients WHERE meal_id = " + i);
-            System.out.println("Ingredients:");
-            while (ingredientsRS.next()) {
-                System.out.println(ingredientsRS.getString("ingredient"));
-            }
-            System.out.println();
-            i++;
-        }
-
-    }
-
-    public void showSQL(String category) throws SQLException {
-        int mealIDSelect = 0;
-        ResultSet mealRS = statement.executeQuery("SELECT * FROM meals " +
-                    "WHERE category = '" + category + "'");
-            // Read the result set
-        System.out.println("Category: " + category);
-            while (mealRS.next()) {
-                mealIDSelect = mealRS.getInt("meal_id");
-                //System.out.println("Category: " + mealRS.getString("category"));
-                System.out.println("name: " + mealRS.getString("meal"));
-
-            }
-        ResultSet ingredientsRS = statement.executeQuery("SELECT * FROM ingredients " +
-                "WHERE meal_id = " + mealIDSelect);
-        System.out.println("Ingredients:");
-        while (ingredientsRS.next()) {
-            System.out.println(ingredientsRS.getString("ingredient"));
-            System.out.println();
-        }
-
-    }
-
-     */
 
 
 
