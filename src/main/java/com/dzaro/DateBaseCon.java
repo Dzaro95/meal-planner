@@ -8,7 +8,7 @@ class DateBaseCon {
 
     // Poczyta o static i jak działa w klasach i obiektach
 
-    private static final String DB_URL = "jdbc:postgresql:meals_db";
+    private static final String DB_URL = "jdbc:postgresql:mealTest";
     private static final String USER = "postgres";
     private static final String PASS = "1111";
 
@@ -17,8 +17,6 @@ class DateBaseCon {
     private Statement statement;
 
 
-    // Można te listy zastąpić enum
-    // Enum może być w osobnym pliku
     enum DayOfWeek {
         MONDAY,
         TUESDAY,
@@ -31,8 +29,6 @@ class DateBaseCon {
 
         }
     }
-
-    // final
     private final List<String> dayOfTheWeek = List.of("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
     private final List<String> category = List.of("breakfast", "lunch" ,"dinner");
 
@@ -45,9 +41,43 @@ class DateBaseCon {
             System.out.println("Wystąpił problem z połączeniem do bazy danych. Błąd: " + exception.getMessage() );
         }
     }
+    public void deleteAllTable() {
+        try{
+            statement.executeUpdate("DROP TABLE if exists meals");
+            statement.executeUpdate("DROP TABLE if exists ingredients");
+            statement.executeUpdate("DROP TABLE if exists plan");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void createAllTable() {
+        try {
+            statement.executeUpdate("CREATE TABLE meals (" +
+                    "meal_id integer ," + // meal_id INTEGER NOT NULL AUTO_INCREMENT
+                    "category varchar(100)," +
+                    "meal varchar(100))"
+            );
+
+            statement.executeUpdate("CREATE TABLE ingredients (" +
+                    "meal_id  integer," +
+                    "ingredient_id  integer," +
+                    "ingredient varchar(100))"
+            );
+
+            statement.executeUpdate("CREATE TABLE plan (" +
+                    "meal_id  integer," +
+                    "category varchar(100)," +
+                    "meal_option  varchar(100))"
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 
-    public void createNewTable() throws SQLException {
+
+    public void startProgramTable() throws SQLException {
         DatabaseMetaData metaData = connection.getMetaData();
         // DROP Table na początku
         // Podział na mniejsze funkcje które robią tylko jedną rzecz
@@ -59,26 +89,7 @@ class DateBaseCon {
         // checking if ResultSet is empty
         if (resultset.next() == false) {
 
-            statement.executeUpdate("DROP TABLE if exists meals");
-            statement.executeUpdate("CREATE TABLE meals (" +
-                    "meal_id integer ," + // meal_id INTEGER NOT NULL AUTO_INCREMENT
-                    "category varchar(100)," +
-                    "meal varchar(100))"
-            );
-
-            statement.executeUpdate("DROP TABLE if exists ingredients");
-            statement.executeUpdate("CREATE TABLE ingredients (" +
-                    "meal_id  integer," +
-                    "ingredient_id  integer," +
-                    "ingredient varchar(100))"
-            );
-
-            statement.executeUpdate("DROP TABLE if exists plan");
-            statement.executeUpdate("CREATE TABLE plan (" +
-                    "meal_id  integer," +
-                    "category varchar(100)," +
-                    "meal_option  varchar(100))"
-            );
+            createAllTable();
             meal_id = 1;
         } else {
             int mealIDSelect = 0;

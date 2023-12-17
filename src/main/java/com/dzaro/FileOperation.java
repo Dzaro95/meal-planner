@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class FileOperation extends DateBaseCon  {
     Scanner scanner = new Scanner(System.in);
-    String filePath;
+    //String filePath;
     String fileName;
 
 
