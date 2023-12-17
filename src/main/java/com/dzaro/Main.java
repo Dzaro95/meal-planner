@@ -21,7 +21,6 @@ public class Main {
 
         Add addMeal;
         DateBaseCon dbCon = new DateBaseCon();
-        dbCon.test();
         FileOperation fileOperation;
         Scanner scanner = new Scanner(System.in);
         List<Object> meal = new ArrayList<>();

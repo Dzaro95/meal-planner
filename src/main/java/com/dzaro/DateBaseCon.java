@@ -6,13 +6,14 @@ import java.util.*;
 
 class DateBaseCon {
 
-    private static final String DB_URL = "jdbc:postgresql:mealTest";
+    private static final String DB_URL = "jdbc:postgresql:meals_db"; // main db = meals_db    test db = mealTest
     private static final String USER = "postgres";
     private static final String PASS = "1111";
 
     private int meal_id = 0;
     private Connection connection;
     private Statement statement;
+    private UserAnswer userAnswer =new UserAnswer();
 
     public void test() {
         for (DayOfWeek day : DayOfWeek.values()) {
@@ -77,6 +78,18 @@ class DateBaseCon {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void showMeals(String category) throws SQLException {
+        ResultSet mealRS = statement.executeQuery("SELECT * FROM meals " +
+                "WHERE category ='" + category + "'" +
+                "ORDER BY meal");
+        // Read the result set
+        //System.out.println("listID = " + listID.get(i) );
+        while (mealRS.next()) {
+            System.out.println(mealRS.getString("meal"));
+        }
+
     }
 
 
@@ -194,61 +207,18 @@ class DateBaseCon {
         }
     }
     */
-
-
-    public void addPlan() throws SQLException {
-        // Rozbicie dużej metody
-
-        Scanner scanner = new Scanner(System.in);
-        cleanTablePlan();
-
-        for(int i = 0; i < dayOfTheWeek.size(); i++) {
-
-            System.out.println(dayOfTheWeek.get(i));
-            for(int j = 0; j < category.size(); j++) {
-                int first = 0;
-
-                // Postaraj się pozbyć nieskończonej pętli while(true)
-                while (true) {
-
-                    ResultSet mealRS = statement.executeQuery("SELECT * FROM meals " +
-                            "WHERE category ='" + category.get(j) + "'" +
-                            "ORDER BY meal");
-                    // Read the result set
-                    //System.out.println("listID = " + listID.get(i) );
-                    while (mealRS.next()) {
-                        System.out.println(mealRS.getString("meal"));
-                    }
-                    if (first == 0) {
-                        System.out.println("Choose the " + category.get(j) + " for " + dayOfTheWeek.get(i) +
-                                " from the list above:");
-                        first++;
-                    }
-
-                    // To powinno być coś oddzielnego od SQLa
-                    String chooseMeal = scanner.nextLine();
-
-                    if (checkCategoryAndMeal(category.get(j), chooseMeal)) {
-                        // w tabeli plan zamiast meal_id dać plan_id albo po prostu id
-                        String planInsert = "INSERT INTO plan (meal_id, category, meal_option) " +
-                                "VALUES (?, ?, ?)";
-                        try (PreparedStatement preparedStatement = connection.prepareStatement(planInsert)) {
-                            preparedStatement.setInt(1, i);
-                            preparedStatement.setString(2,category.get(j));
-                            preparedStatement.setString(3, chooseMeal);
-                            preparedStatement.executeUpdate();
-                        }
-                        first = 0;
-                        break;
-                    } else {
-                        System.out.println("This meal doesn’t exist. Choose a meal from the list above.");
-
-                    }
-                }
-            }
-            System.out.println("Yeah! We planned the meals for " + dayOfTheWeek.get(i) + ".");
-            System.out.println();
+    public void insertIntoPlan(int id, String category, String chooseMeal) throws SQLException {
+        String planInsert = "INSERT INTO plan (meal_id, category, meal_option) " +
+                "VALUES (?, ?, ?)";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(planInsert)) {
+            preparedStatement.setInt(1, id);
+            preparedStatement.setString(2,category.toString());
+            preparedStatement.setString(3, chooseMeal);
+            preparedStatement.executeUpdate();
         }
+
+    }
+    public void showPlannedPlan() throws SQLException{
         ResultSet mealRS = statement.executeQuery("SELECT * FROM plan");
         // Read the result set
         //System.out.println("listID = " + listID.get(i) );
@@ -267,6 +237,43 @@ class DateBaseCon {
                 System.out.println();
             }
         }
+    }
+
+    public void addPlan() throws SQLException {
+        // Rozbicie dużej metody
+        cleanTablePlan();
+        for (DayOfWeek day : DayOfWeek.values()) {
+        //}
+        //for(int i = 0; i < dayOfTheWeek.size(); i++) {
+            System.out.println(day);
+            for(Category category : Category.values()){
+            //for(int j = 0; j < category.size(); j++) {
+                int first = 0;
+                // Postaraj się pozbyć nieskończonej pętli while(true)
+
+                    showMeals(category.toString());
+                    if (first == 0) {
+                        System.out.println("Choose the " + category + " for " + day +
+                                " from the list above:");
+                        first++;
+                    }
+                    // To powinno być coś oddzielnego od SQLa
+                    String chooseMeal = userAnswer.userAnswerString();
+
+                    if (checkCategoryAndMeal(category.toString(), chooseMeal)) {
+                        insertIntoPlan(day.ordinal(),category.toString(),chooseMeal);
+                        first = 0;
+                        break;
+                    } else {
+                        System.out.println("This meal doesn’t exist. Choose a meal from the list above.");
+                    }
+
+            }
+            System.out.println("Yeah! We planned the meals for " + day + ".");
+            System.out.println();
+        }
+        showPlannedPlan();
+
     }
 
     public boolean checkEmptyPlan() throws SQLException {
