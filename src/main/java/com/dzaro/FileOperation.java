@@ -15,7 +15,7 @@ public class FileOperation extends DateBaseCon  {
 
 
     public FileOperation() throws SQLException {
-        if(checkPlan()) {
+        if(checkEmptyPlan()) {
             System.out.println("Unable to save. Plan your meals first.");
         } else {
             System.out.println("Input a filename:");

@@ -6,8 +6,6 @@ import java.util.*;
 
 class DateBaseCon {
 
-    // Poczyta o static i jak działa w klasach i obiektach
-
     private static final String DB_URL = "jdbc:postgresql:mealTest";
     private static final String USER = "postgres";
     private static final String PASS = "1111";
@@ -16,19 +14,13 @@ class DateBaseCon {
     private Connection connection;
     private Statement statement;
 
-
-    enum DayOfWeek {
-        MONDAY,
-        TUESDAY,
-        WEDNESDAY,
-    }
-
     public void test() {
         for (DayOfWeek day : DayOfWeek.values()) {
             System.out.println("id = " + day.ordinal() + " name = " + day);
 
         }
     }
+
     private final List<String> dayOfTheWeek = List.of("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
     private final List<String> category = List.of("breakfast", "lunch" ,"dinner");
 
@@ -46,7 +38,19 @@ class DateBaseCon {
             statement.executeUpdate("DROP TABLE if exists meals");
             statement.executeUpdate("DROP TABLE if exists ingredients");
             statement.executeUpdate("DROP TABLE if exists plan");
-        } catch (Exception e) {
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public void cleanTablePlan() {
+        try{
+            statement.executeUpdate("DROP TABLE if exists plan");
+            statement.executeUpdate("CREATE TABLE plan (" +
+                    "meal_id  integer," +
+                    "category varchar(100)," +
+                    "meal_option  varchar(100))"
+            );
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -70,7 +74,7 @@ class DateBaseCon {
                     "category varchar(100)," +
                     "meal_option  varchar(100))"
             );
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -101,12 +105,7 @@ class DateBaseCon {
         }
     }
 
-    public void addValue(String category, String meal, ArrayList<String> array) throws SQLException {
-        //System.out.println("mealID: " + meal_id);
-
-        //System.out.println(meal_id);
-
-        // Przy AUTO_INCREMENT pominąć dodawanie "meal_id", wartość zwiększy się automatycznie
+    public void addMeal(String category, String meal) throws SQLException {
         String mealInsert = "INSERT INTO meals (meal_id, category, meal) VALUES (?,?,?)";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(mealInsert)) {
@@ -115,10 +114,9 @@ class DateBaseCon {
             preparedStatement.setString(3, meal);
             preparedStatement.executeUpdate();
         }
+    }
 
-        // SELECT meal_id FROM meals WHERE meal = "string"
-
-
+    public void addIngredients(ArrayList<String> array) throws SQLException {
         String ingredientsInput = "INSERT INTO ingredients (meal_id, ingredient_id,ingredient) VALUES (?,?,?)";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(ingredientsInput)) {
@@ -130,43 +128,49 @@ class DateBaseCon {
                 preparedStatement.executeUpdate();
             }
         }
+    }
+    // Przy AUTO_INCREMENT pominąć dodawanie "meal_id", wartość zwiększy się automatycznie
+    public void addValue(String category, String meal, ArrayList<String> array) {
+        try {
+            addMeal(category, meal);
+            addIngredients(array);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
         meal_id++;
 
     }
 
     // Inna nazwa, nazwa musi opisywać co robi metoda np. hasCategoryMeals(category)
-    public boolean checkEmpty(String category) throws SQLException {
-        int mealIDSelect = 0;
+    public boolean checkEmptyTable(String category) throws SQLException {
 
-        // nazwa mealIdResult albo podobna
         ResultSet mealID = statement.executeQuery("SELECT meal_id " +
                 "FROM meals WHERE category = '" + category + "'");
-
-       // return !mealID.next();
-
-        while (mealID.next()) {
-
-            if (mealID.getInt("meal_id") > mealIDSelect) {
-                mealIDSelect = mealID.getInt("meal_id");
+        return !mealID.next();
+    }
+    public boolean checkEmptyTable() throws SQLException {
+        boolean check = true;
+        for (String category : category) {
+            ResultSet mealID = statement.executeQuery("SELECT meal_id " +
+                    "FROM meals WHERE category = '" + category + "'");
+            if (!mealID.next()) {
+                check = false;
             }
         }
-
-        // System.out.println("meal id = " + mealIDSelect);
-        return mealIDSelect < 1;
+        System.out.println("zwracam: " + check);
+        return check;
     }
 
 
 
+
     public boolean checkCategoryAndMeal(String category, String meal ) throws SQLException {
-        int mealIDSelect = 0;
+
         ResultSet mealCheck = statement.executeQuery("SELECT * FROM meals " +
                 "WHERE category ='"+ category+ "' AND meal ='" + meal + "'");
-        while (mealCheck.next()) {
-            mealIDSelect = mealCheck.getInt("meal_id");
-
-        }
-
-        return mealIDSelect > 0;
+        return mealCheck.next();
     }
 
     // Najpierw zbierasz dane od użytkownika do obiekty WeeklyPlan a na koncu przekazujesz go do metody która zapisze go w bazie;
@@ -196,12 +200,7 @@ class DateBaseCon {
         // Rozbicie dużej metody
 
         Scanner scanner = new Scanner(System.in);
-        statement.executeUpdate("DROP TABLE if exists plan");
-        statement.executeUpdate("CREATE TABLE plan (" +
-                "meal_id integer," +
-                "category varchar(100)," +
-                "meal_option varchar(100))"
-        );
+        cleanTablePlan();
 
         for(int i = 0; i < dayOfTheWeek.size(); i++) {
 
@@ -271,14 +270,9 @@ class DateBaseCon {
     }
 
     public boolean checkEmptyPlan() throws SQLException {
-        int mealIDSelect = 0;
+
         ResultSet mealID = statement.executeQuery("SELECT meal_id FROM plan");
-        while (mealID.next()) {
-            mealIDSelect = mealID.getInt("meal_id");
-
-        }
-
-        return mealIDSelect < 1;
+        return !mealID.next();
     }
 
 

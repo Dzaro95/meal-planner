@@ -21,7 +21,7 @@ public class Main {
 
         Add addMeal;
         DateBaseCon dbCon = new DateBaseCon();
-        //dbCon.test();
+        dbCon.test();
         FileOperation fileOperation;
         Scanner scanner = new Scanner(System.in);
         List<Object> meal = new ArrayList<>();
@@ -61,15 +61,13 @@ public class Main {
                             case ("lunch"):
                             case ("dinner"):
                                 try {
-                                    if (dbCon.checkEmpty(chooseCategory)) {
+                                    if (dbCon.checkEmptyTable(chooseCategory)) {
                                         System.out.println("No meals found.");
                                         loopShow = false;
                                         break;
                                     } else {
                                         System.out.println();
-                                        //dbCon.showSQL();
                                         dbCon.showSQL(chooseCategory);
-                                        //meal.forEach(System.out::println);
                                         loopShow = false;
                                         break;
                                     }
@@ -85,7 +83,12 @@ public class Main {
                     break;
                 case("plan"):
                     try {
-                        dbCon.addPlan();
+                        if (dbCon.checkEmptyTable()) {
+                            System.out.println();
+                            dbCon.addPlan();
+                        } else {
+                            System.out.println("First add meals in all category.");
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -98,7 +101,8 @@ public class Main {
                     }
                     break;
                 case("delete"):
-
+                    dbCon.deleteAllTable();
+                    dbCon.createAllTable();
                     break;
                 case ("exit"):
                     System.out.println("Bye!");
