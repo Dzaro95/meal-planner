@@ -246,12 +246,12 @@ class DateBaseCon {
         //}
         //for(int i = 0; i < dayOfTheWeek.size(); i++) {
             System.out.println(day);
-            for(Category category : Category.values()){
-            //for(int j = 0; j < category.size(); j++) {
+            for(Category category : Category.values()) {
+                //for(int j = 0; j < category.size(); j++) {
                 int first = 0;
                 // Postaraj się pozbyć nieskończonej pętli while(true)
-
-                    showMeals(category.toString());
+                while (true){
+                        showMeals(category.toString());
                     if (first == 0) {
                         System.out.println("Choose the " + category + " for " + day +
                                 " from the list above:");
@@ -261,13 +261,13 @@ class DateBaseCon {
                     String chooseMeal = userAnswer.userAnswerString();
 
                     if (checkCategoryAndMeal(category.toString(), chooseMeal)) {
-                        insertIntoPlan(day.ordinal(),category.toString(),chooseMeal);
+                        insertIntoPlan(day.ordinal(), category.toString(), chooseMeal);
                         first = 0;
                         break;
                     } else {
                         System.out.println("This meal doesn’t exist. Choose a meal from the list above.");
                     }
-
+                }
             }
             System.out.println("Yeah! We planned the meals for " + day + ".");
             System.out.println();
