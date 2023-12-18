@@ -1,12 +1,13 @@
 package com.dzaro;
 
 import java.sql.*;
+import java.time.DayOfWeek;
 import java.util.*;
 
 
 class DateBaseCon {
 
-    private static final String DB_URL = "jdbc:postgresql:meals_db"; // main db = meals_db    test db = mealTest
+    private static final String DB_URL = "jdbc:postgresql:copyMeals_db"; // main db = meals_db    test db = mealTest
     private static final String USER = "postgres";
     private static final String PASS = "1111";
 
@@ -16,14 +17,8 @@ class DateBaseCon {
     private UserAnswer userAnswer =new UserAnswer();
 
     public void test() {
-        for (DayOfWeek day : DayOfWeek.values()) {
-            System.out.println("id = " + day.ordinal() + " name = " + day);
-
-        }
+        System.out.println(DayOfWeek.of(1));
     }
-
-    private final List<String> dayOfTheWeek = List.of("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
-    private final List<String> category = List.of("breakfast", "lunch" ,"dinner");
 
     public DateBaseCon()  {
         try {
@@ -165,14 +160,14 @@ class DateBaseCon {
     }
     public boolean checkEmptyTable() throws SQLException {
         boolean check = true;
-        for (String category : category) {
+        for (Category category : Category.values()) {
             ResultSet mealID = statement.executeQuery("SELECT meal_id " +
-                    "FROM meals WHERE category = '" + category + "'");
+                    "FROM meals WHERE category = '" + category.toString().toLowerCase() + "'");
             if (!mealID.next()) {
                 check = false;
             }
         }
-        System.out.println("zwracam: " + check);
+        //System.out.println("zwracam: " + check);
         return check;
     }
 
@@ -228,9 +223,9 @@ class DateBaseCon {
             String category = mealRS.getString("category");
             // System.out.println(dayOfTheWeek.get(mealRS.getInt("meal_id")));
             if (category.equalsIgnoreCase("breakfast")) {
-                System.out.println(dayOfTheWeek.get(mealRS.getInt("meal_id")));
+                System.out.println(UpperFirstLetter.upper(DayOfWeek.of(mealRS.getInt("meal_id")).toString()));
             }
-            System.out.print(category.substring(0,1).toUpperCase() + category.substring(1) + ": ");
+            System.out.print(UpperFirstLetter.upper(category) + ": ");
             System.out.println(mealRS.getString("meal_option"));
 
             if (category.equalsIgnoreCase("dinner")) {
@@ -243,24 +238,20 @@ class DateBaseCon {
         // Rozbicie dużej metody
         cleanTablePlan();
         for (DayOfWeek day : DayOfWeek.values()) {
-        //}
-        //for(int i = 0; i < dayOfTheWeek.size(); i++) {
-            System.out.println(day);
+
+            System.out.println(UpperFirstLetter.upper(day.toString()));
             for(Category category : Category.values()) {
-                //for(int j = 0; j < category.size(); j++) {
                 int first = 0;
                 // Postaraj się pozbyć nieskończonej pętli while(true)
-                while (true){
-                        showMeals(category.toString());
+                while (true){ // jeśli usunę while to podczas wprowadzenia złej nazwy potrawy pętla idzie dalej
+                        showMeals(category.toString().toLowerCase());
                     if (first == 0) {
-                        System.out.println("Choose the " + category + " for " + day +
+                        System.out.println("Choose the " +category.toString().toLowerCase() + " for " + UpperFirstLetter.upper(day.toString()) +
                                 " from the list above:");
                         first++;
                     }
-                    // To powinno być coś oddzielnego od SQLa
                     String chooseMeal = userAnswer.userAnswerString();
-
-                    if (checkCategoryAndMeal(category.toString(), chooseMeal)) {
+                    if (checkCategoryAndMeal(category.toString().toLowerCase(), chooseMeal)) {
                         insertIntoPlan(day.ordinal(), category.toString(), chooseMeal);
                         first = 0;
                         break;
@@ -269,7 +260,7 @@ class DateBaseCon {
                     }
                 }
             }
-            System.out.println("Yeah! We planned the meals for " + day + ".");
+            System.out.println("Yeah! We planned the meals for " + UpperFirstLetter.upper(day.toString()) + ".");
             System.out.println();
         }
         showPlannedPlan();
@@ -282,6 +273,26 @@ class DateBaseCon {
         return !mealID.next();
     }
 
+    public void showNameMealForId(int id) throws SQLException {
+        ResultSet mealRS = statement.executeQuery("SELECT * FROM meals WHERE meal_id = " + id);
+        // Read the result set
+        //System.out.println("listID = " + listID.get(i) );
+        while (mealRS.next()) {
+            System.out.println("name: " + mealRS.getString("meal"));
+        }
+    }
+
+    public void showIngredientsForId(int id) throws SQLException {
+        ResultSet ingredientsRS = statement.executeQuery("SELECT * FROM ingredients WHERE meal_id = " + id);
+        System.out.println("Ingredients:");
+        while (ingredientsRS.next()) {
+            System.out.println(ingredientsRS.getString("ingredient"));
+        }
+    }
+
+    public int checkLastIdIndex() {
+        return 0;
+    }
 
     public void showSQL(String category) throws SQLException {
 
@@ -295,18 +306,8 @@ class DateBaseCon {
         int i = 0;
         System.out.println("Category: " + category);
         while (i < mealIDSize) {
-            ResultSet mealRS = statement.executeQuery("SELECT * FROM meals WHERE meal_id = " + listID.get(i));
-            // Read the result set
-            //System.out.println("listID = " + listID.get(i) );
-            while (mealRS.next()) {
-                System.out.println("name: " + mealRS.getString("meal"));
-            }
-
-            ResultSet ingredientsRS = statement.executeQuery("SELECT * FROM ingredients WHERE meal_id = " + listID.get(i));
-            System.out.println("Ingredients:");
-            while (ingredientsRS.next()) {
-                System.out.println(ingredientsRS.getString("ingredient"));
-            }
+            showNameMealForId(i);
+            showIngredientsForId(i);
             System.out.println();
             i++;
         }

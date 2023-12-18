@@ -86,7 +86,8 @@ class Add  {
             ingrediensBefore = scanner.nextLine();
 
             if (checkWord(ingrediensBefore.replaceAll("\\s+", ""))) {
-                ArrayList<String> separateIngredients = new ArrayList<>(List.of(ingrediensBefore.split(", ")));
+                ingrediensBefore = ingrediensBefore.replaceAll("\\s+", "");
+                ArrayList<String> separateIngredients = new ArrayList<>(List.of(ingrediensBefore.split(",")));
                 this.ingredients = separateIngredients;
                 l = false;
             } else {

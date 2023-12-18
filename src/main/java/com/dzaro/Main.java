@@ -12,12 +12,7 @@ public class Main {
 
         // Stworzenie obiektu dostępu do bazy
         // Stworzenie wszystkich wymaganych obiektów na początku programu
-        // Try-Catch i obsługa błędów
 
-        /*
-        IngredientsSaver IngredientsSaver = new IngredientsSaver(dbCon);
-        IngredientsSaver.save();
-        */
 
         Add addMeal;
         DateBaseCon dbCon = new DateBaseCon();
@@ -43,6 +38,7 @@ public class Main {
 
 
                     meal.add(addMeal);
+                    System.out.println();
                     System.out.println("The meal has been added!");
                     try {
                         dbCon.addValue(addMeal.getSelectMealCategory(), addMeal.getMealName(), addMeal.getIngredients());
@@ -54,7 +50,7 @@ public class Main {
                     System.out.println("Which category do you want to print (breakfast, lunch, dinner)?");
                     boolean loopShow = true;
                     while(loopShow) {
-                        String chooseCategory = scanner.nextLine();
+                        String chooseCategory = scanner.nextLine().toLowerCase();
                         switch (chooseCategory) {
                             case ("breakfast"):
                             case ("lunch"):
