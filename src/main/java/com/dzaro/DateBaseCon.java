@@ -14,7 +14,7 @@ class DateBaseCon {
     private int meal_id = 0;
     private Connection connection;
     private Statement statement;
-    private UserAnswer userAnswer =new UserAnswer();
+    private UserAnswer userAnswer = new UserAnswer();
 
     public void test() {
         System.out.println(DayOfWeek.of(1));
@@ -91,11 +91,7 @@ class DateBaseCon {
 
     public void startProgramTable() throws SQLException {
         DatabaseMetaData metaData = connection.getMetaData();
-        // DROP Table na początku
-        // Podział na mniejsze funkcje które robią tylko jedną rzecz
         // SQL - AUTO_INCREMENT, PRIMARY KEY, NOT NULL
-
-
         ResultSet resultset = metaData.getTables(null, null, "meals",null);
 
         // checking if ResultSet is empty
@@ -180,28 +176,6 @@ class DateBaseCon {
                 "WHERE category ='"+ category+ "' AND meal ='" + meal + "'");
         return mealCheck.next();
     }
-
-    // Najpierw zbierasz dane od użytkownika do obiekty WeeklyPlan a na koncu przekazujesz go do metody która zapisze go w bazie;
-
-  /*
-   class WeeklyPlan {
-        private List<DayPlan> dayPlans;
-    }
-
-    class DayPlan {
-        private DayOfWeek day;
-        private Category category;
-        private Meal meal;
-    }
-
-    public void savePlan(WeeklyPlan weeklyPlan) {
-        for (DayPlan dayPlan : weeklyPlan.dayPlans) {
-            dayPlan.day;
-            dayPlan.category;
-            dayPlan.meal
-        }
-    }
-    */
     public void insertIntoPlan(int id, String category, String chooseMeal) throws SQLException {
         String planInsert = "INSERT INTO plan (meal_id, category, meal_option) " +
                 "VALUES (?, ?, ?)";
@@ -290,60 +264,67 @@ class DateBaseCon {
         }
     }
 
-    public int checkLastIdIndex() {
-        return 0;
-    }
-
-    public void showSQL(String category) throws SQLException {
-
+    public int howIndexInTable(String category) throws SQLException {
         ArrayList<Integer> listID = new ArrayList<>();
         ResultSet mealID = statement.executeQuery("SELECT * FROM meals " +
                 "WHERE category = '" + category + "'");
         while (mealID.next()) {
             listID.add(mealID.getInt("meal_id"));
         }
-        int mealIDSize = listID.size();
-        int i = 0;
+
+        return listID.size();
+    }
+
+    public void showMealAndIngredientsForCategory(String category) throws SQLException {
+
+        int mealIDSize = howIndexInTable(category);
         System.out.println("Category: " + category);
-        while (i < mealIDSize) {
-            showNameMealForId(i);
-            showIngredientsForId(i);
+        for(int id = 0; id < mealIDSize; id++) {
+            showNameMealForId(id);
+            showIngredientsForId(id);
             System.out.println();
-            i++;
         }
 
     }
+
+    public ArrayList<String> allMealFromPlanInList() throws SQLException{
+        ArrayList<String> allMealFromPlanList = new ArrayList<>();
+        ResultSet meal_option = statement.executeQuery("SELECT meal_option FROM plan");
+        while (meal_option.next()) {
+            String meal = meal_option.getString("meal_option");
+           allMealFromPlanList.add(meal);
+        }
+        return allMealFromPlanList;
+    }
+
+    public ArrayList<String> allIngredientsForMeal(String meal) throws SQLException {
+        ArrayList<String> ingredientsList = new ArrayList<>();
+        ResultSet mealRS = statement.executeQuery("SELECT * FROM meals WHERE meal = '" + meal + "'");
+        int id = 0;
+        while (mealRS.next()) {
+            id = mealRS.getInt("meal_id");
+        }
+        ResultSet ingredientsRS = statement.executeQuery("SELECT ingredient FROM ingredients WHERE meal_id = " + id);
+        while (ingredientsRS.next()) {
+            String list[] = ingredientsRS.getString("ingredient").split(",");
+            for (int k = 0; k < list.length; k++) {
+
+                ingredientsList.add(list[k]);
+            }
+        }
+        return ingredientsList;
+    }
+
+
     public HashMap<String, Integer > showIngredients() throws SQLException {
 
         HashMap<String, Integer> ingredientsMap = new HashMap<>();
-        ResultSet meal_option = statement.executeQuery("SELECT meal_option FROM plan");
-        List<String> mealList = new ArrayList<>();
-        List<String> ingredientList = new ArrayList<>();
-        while (meal_option.next()) {
-            String meal = meal_option.getString("meal_option");
-            mealList.add(meal);
-        }
+        ArrayList<String> mealList = allMealFromPlanInList();
+        ArrayList<String> ingredientsList = new ArrayList<>();
         for (String meal : mealList) {
-            ResultSet mealRS = statement.executeQuery("SELECT * FROM meals WHERE meal = '" + meal + "'");
-            // Read the result set
-            //System.out.println("listID = " + listID.get(i) );
-            int i = 0;
-            while (mealRS.next()) {
-                i = mealRS.getInt("meal_id");
-            }
-            ResultSet ingredientsRS = statement.executeQuery("SELECT ingredient FROM ingredients WHERE meal_id = " + i);
-            //System.out.println("Ingredients:");
-            while (ingredientsRS.next()) {
-                String list[] = ingredientsRS.getString("ingredient").split(",");
-                for (int k = 0; k < list.length; k++) {
-
-                    ingredientList.add(list[k]);
-                }
-                //ingredientList.add(Arrays.toString(list));
-                //System.out.println(ingredientsRS.getString("ingredient"));
-            }
+            ingredientsList = allIngredientsForMeal(meal);
         }
-        for(String ingredients : ingredientList) {
+        for(String ingredients : ingredientsList) {
             if(ingredientsMap.containsKey(ingredients)) {
                 int value = ingredientsMap.get(ingredients);
                 ingredientsMap.put(ingredients,++value);
@@ -352,10 +333,7 @@ class DateBaseCon {
                 ingredientsMap.put(ingredients,1);
             }
         }
-
-
         return ingredientsMap;
-
     }
     public void closeConnection() throws SQLException {
         statement.close();

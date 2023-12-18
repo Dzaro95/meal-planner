@@ -24,9 +24,12 @@ public class FileOperation extends DateBaseCon  {
             saveIngredients();
         }
     }
+    /*
     public boolean checkPlan() throws SQLException {
         return checkEmptyPlan();
     }
+
+     */
     public void createFile(String fileName) {
         try {
             //filePath = "C:\\Users\\dom\\Desktop\\Java\\Ingredients\\" + fileName;
@@ -54,14 +57,13 @@ public class FileOperation extends DateBaseCon  {
                     //System.out.println(key + " x" + ingredients.get(key));
                 } else {
                     printWriter.println(key);
-                    //System.out.println(key);
                 }
             }
 
             System.out.println("Saved!");
 
         } catch (IOException e) {
-
+            e.printStackTrace();
         }
     }
 

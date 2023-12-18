@@ -62,7 +62,7 @@ public class Main {
                                         break;
                                     } else {
                                         System.out.println();
-                                        dbCon.showSQL(chooseCategory);
+                                        dbCon.showMealAndIngredientsForCategory(chooseCategory);
                                         loopShow = false;
                                         break;
                                     }
