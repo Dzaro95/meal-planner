@@ -264,7 +264,7 @@ class DateBaseCon {
         }
     }
 
-    public ArrayList<Integer> howIndexInTable(String category) throws SQLException {
+    public ArrayList<Integer> listIndexInTable(String category) throws SQLException {
         ArrayList<Integer> listID = new ArrayList<>();
         ResultSet mealID = statement.executeQuery("SELECT meal_id FROM meals " +
                 "WHERE category = '" + category + "'");
@@ -281,7 +281,7 @@ class DateBaseCon {
  */
     public void showMealAndIngredientsForCategory(String category) throws SQLException {
 
-        ArrayList<Integer> lisIdInCategory = howIndexInTable(category);
+        ArrayList<Integer> lisIdInCategory = listIndexInTable(category);
         System.out.println("Category: " + category);
         System.out.println();
         for(int id : lisIdInCategory) {
