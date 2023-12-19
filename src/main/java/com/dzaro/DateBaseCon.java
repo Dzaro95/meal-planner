@@ -16,10 +16,6 @@ class DateBaseCon {
     private Statement statement;
     private UserAnswer userAnswer = new UserAnswer();
 
-    public void test() {
-        System.out.println(DayOfWeek.of(1));
-    }
-
     public DateBaseCon()  {
         try {
             connection = DriverManager.getConnection(DB_URL, USER, PASS);
@@ -154,6 +150,7 @@ class DateBaseCon {
                 "FROM meals WHERE category = '" + category + "'");
         return !mealID.next();
     }
+
     public boolean checkEmptyTable() throws SQLException {
         boolean check = true;
         for (Category category : Category.values()) {
@@ -208,7 +205,7 @@ class DateBaseCon {
         }
     }
 
-    public void addPlan() throws SQLException {
+    public void addPlanForAllDay() throws SQLException {
         // Rozbicie dużej metody
         cleanTablePlan();
         for (DayOfWeek day : DayOfWeek.values()) {

@@ -80,7 +80,7 @@ public class Main {
                     try {
                         if (dbCon.checkEmptyTable()) {
                             System.out.println();
-                            dbCon.addPlan();
+                            dbCon.addPlanForAllDay();
                         } else {
                             System.out.println("First add meals in all category.");
                         }
