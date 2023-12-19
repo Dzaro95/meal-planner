@@ -69,8 +69,6 @@ public class Main {
                                 System.out.println("Wrong meal category! Choose from: breakfast, lunch, dinner.");
                         }
                     }
-
-
                     break;
                 case("plan"):
                     try {
@@ -79,6 +77,7 @@ public class Main {
                             dbCon.addPlanForAllDay();
                         } else {
                             System.out.println("First add meals in all category.");
+                            dbCon.whichCategoryEmpty();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();

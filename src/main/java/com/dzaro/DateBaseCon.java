@@ -7,7 +7,7 @@ import java.util.*;
 
 class DateBaseCon {
 
-    private static final String DB_URL = "jdbc:postgresql:mealTest"; // main db = meals_db    test db = mealTest : copyMeals_db
+    private static final String DB_URL = "jdbc:postgresql:copyMeals_db"; // main db = meals_db    test db = mealTest : copyMeals_db
     private static final String USER = "postgres";
     private static final String PASS = "1111";
 
@@ -50,19 +50,19 @@ class DateBaseCon {
     public void createAllTable() {
         try {
             statement.executeUpdate("CREATE TABLE meals (" +
-                    "meal_id integer SERIAL NOT NULL PRIMARY KEY," + // meal_id INTEGER NOT NULL AUTO_INCREMENT
+                    "meal_id integer NOT NULL PRIMARY KEY," + // meal_id INTEGER NOT NULL AUTO_INCREMENT
                     "category varchar(100) NOT NULL," +
                     "meal varchar(100) NOT NULL)"
             );
 
             statement.executeUpdate("CREATE TABLE ingredients (" +
-                    "meal_id integer SERIAL NOT NULL PRIMARY KEY," +
+                    "meal_id integer NOT NULL PRIMARY KEY," +
                     "ingredient_id integer NOT NULL," +
                     "ingredient varchar(100) NOT NULL)"
             );
 
             statement.executeUpdate("CREATE TABLE plan (" +
-                    "plan_id integer SERIAL NOT NULL," +
+                    "plan_id integer NOT NULL," +
                     "category varchar(100) NOT NULL," +
                     "meal_option varchar(100) NOT NULL)"
             );
@@ -162,6 +162,19 @@ class DateBaseCon {
         }
         //System.out.println("zwracam: " + check);
         return check;
+    }
+
+    public void whichCategoryEmpty() throws SQLException{
+        ArrayList<String> categoryEmpty = new ArrayList<>();
+        for (Category category : Category.values()) {
+            ResultSet mealID = statement.executeQuery("SELECT meal_id " +
+                    "FROM meals WHERE category = '" + category.toString().toLowerCase() + "'");
+            if (!mealID.next()) {
+                categoryEmpty.add(category.toString().toLowerCase());
+            }
+        }
+        System.out.println("Empty category: ");
+        categoryEmpty.forEach(category -> System.out.println(category));
     }
 
 
