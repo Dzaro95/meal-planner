@@ -274,11 +274,7 @@ class DateBaseCon {
 
         return listID;
     }
-/* więc tak dajemy kategorie
-  każda kategoria łączy się ze składnikami po id
-  musimy uzyskać jakie id są w danej kategori a później po tym wywoływać
 
- */
     public void showMealAndIngredientsForCategory(String category) throws SQLException {
 
         ArrayList<Integer> lisIdInCategory = listIndexInTable(category);

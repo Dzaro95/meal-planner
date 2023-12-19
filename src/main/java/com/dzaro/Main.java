@@ -26,7 +26,7 @@ public class Main {
             e.printStackTrace();
         }
         while(loop) {
-            System.out.println("What would you like to do (add, show, plan, save, delete, exit)?");
+            System.out.println("What would you like to do (add, show, plan, save, delete plan, exit)?");
             String choose = scanner.nextLine();
 
             switch(choose){
@@ -95,7 +95,7 @@ public class Main {
                         e.printStackTrace();
                     }
                     break;
-                case("delete"):
+                case("delete plan"):
                     dbCon.deleteAllTable();
                     dbCon.createAllTable();
                     break;
