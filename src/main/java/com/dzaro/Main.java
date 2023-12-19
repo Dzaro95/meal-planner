@@ -92,8 +92,7 @@ public class Main {
                     }
                     break;
                 case("delete plan"):
-                    dbCon.deleteAllTable();
-                    dbCon.createAllTable();
+                    dbCon.cleanTablePlan();
                     break;
                 case ("exit"):
                     System.out.println("Bye!");
