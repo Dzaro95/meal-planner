@@ -7,7 +7,7 @@ import java.util.*;
 
 class DateBaseCon {
 
-    private static final String DB_URL = "jdbc:postgresql:copyMeals_db"; // main db = meals_db    test db = mealTest
+    private static final String DB_URL = "jdbc:postgresql:mealTest"; // main db = meals_db    test db = mealTest : copyMeals_db
     private static final String USER = "postgres";
     private static final String PASS = "1111";
 
@@ -42,7 +42,7 @@ class DateBaseCon {
         try{
             statement.executeUpdate("DROP TABLE if exists plan");
             statement.executeUpdate("CREATE TABLE plan (" +
-                    "meal_id  integer," +
+                    "plan_id  integer," +
                     "category varchar(100)," +
                     "meal_option  varchar(100))"
             );
@@ -66,7 +66,7 @@ class DateBaseCon {
             );
 
             statement.executeUpdate("CREATE TABLE plan (" +
-                    "meal_id  integer," +
+                    "plan_id  integer," +
                     "category varchar(100)," +
                     "meal_option  varchar(100))"
             );
@@ -177,7 +177,7 @@ class DateBaseCon {
         return mealCheck.next();
     }
     public void insertIntoPlan(int id, String category, String chooseMeal) throws SQLException {
-        String planInsert = "INSERT INTO plan (meal_id, category, meal_option) " +
+        String planInsert = "INSERT INTO plan (plan_id, category, meal_option) " +
                 "VALUES (?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(planInsert)) {
             preparedStatement.setInt(1, id);
@@ -243,7 +243,7 @@ class DateBaseCon {
 
     public boolean checkEmptyPlan() throws SQLException {
 
-        ResultSet mealID = statement.executeQuery("SELECT meal_id FROM plan");
+        ResultSet mealID = statement.executeQuery("SELECT plan_id FROM plan");
         return !mealID.next();
     }
 
@@ -279,7 +279,8 @@ class DateBaseCon {
 
         int mealIDSize = howIndexInTable(category);
         System.out.println("Category: " + category);
-        for(int id = 0; id < mealIDSize; id++) {
+        System.out.println();
+        for(int id = 1; id < mealIDSize; id++) {
             showNameMealForId(id);
             showIngredientsForId(id);
             System.out.println();
