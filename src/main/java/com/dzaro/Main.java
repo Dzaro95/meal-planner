@@ -10,10 +10,6 @@ public class Main {
 
     public static void main(String[] args)  {
 
-        // Stworzenie obiektu dostępu do bazy
-        // Stworzenie wszystkich wymaganych obiektów na początku programu
-
-
         Add addMeal;
         DateBaseCon dbCon = new DateBaseCon();
         FileOperation fileOperation;
