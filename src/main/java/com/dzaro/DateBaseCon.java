@@ -42,9 +42,9 @@ class DateBaseCon {
         try{
             statement.executeUpdate("DROP TABLE if exists plan");
             statement.executeUpdate("CREATE TABLE plan (" +
-                    "plan_id  integer," +
-                    "category varchar(100)," +
-                    "meal_option  varchar(100))"
+                    "plan_id SERIAL NOT NULL," +
+                    "category varchar(100) NOT NULL," +
+                    "meal_option varchar(100) NOT NULL )"
             );
         } catch (SQLException e) {
             e.printStackTrace();
@@ -54,21 +54,21 @@ class DateBaseCon {
     public void createAllTable() {
         try {
             statement.executeUpdate("CREATE TABLE meals (" +
-                    "meal_id integer ," + // meal_id INTEGER NOT NULL AUTO_INCREMENT
-                    "category varchar(100)," +
-                    "meal varchar(100))"
+                    "meal_id integer SERIAL NOT NULL PRIMARY KEY," + // meal_id INTEGER NOT NULL AUTO_INCREMENT
+                    "category varchar(100) NOT NULL," +
+                    "meal varchar(100) NOT NULL)"
             );
 
             statement.executeUpdate("CREATE TABLE ingredients (" +
-                    "meal_id  integer," +
-                    "ingredient_id  integer," +
-                    "ingredient varchar(100))"
+                    "meal_id integer SERIAL NOT NULL PRIMARY KEY," +
+                    "ingredient_id integer NOT NULL," +
+                    "ingredient varchar(100) NOT NULL)"
             );
 
             statement.executeUpdate("CREATE TABLE plan (" +
-                    "plan_id  integer," +
-                    "category varchar(100)," +
-                    "meal_option  varchar(100))"
+                    "plan_id integer SERIAL NOT NULL," +
+                    "category varchar(100) NOT NULL," +
+                    "meal_option varchar(100) NOT NULL)"
             );
         } catch (SQLException e) {
             e.printStackTrace();
@@ -86,8 +86,6 @@ class DateBaseCon {
         }
 
     }
-
-
 
     public void startProgramTable() throws SQLException {
         DatabaseMetaData metaData = connection.getMetaData();
@@ -118,6 +116,7 @@ class DateBaseCon {
             preparedStatement.setString(3, meal);
             preparedStatement.executeUpdate();
         }
+        System.out.println(meal_id);
     }
 
     public void addIngredients(ArrayList<String> array) throws SQLException {
@@ -132,6 +131,7 @@ class DateBaseCon {
                 preparedStatement.executeUpdate();
             }
         }
+        System.out.println(meal_id);
     }
     // Przy AUTO_INCREMENT pominąć dodawanie "meal_id", wartość zwiększy się automatycznie
     public void addValue(String category, String meal, ArrayList<String> array) {
@@ -264,23 +264,27 @@ class DateBaseCon {
         }
     }
 
-    public int howIndexInTable(String category) throws SQLException {
+    public ArrayList<Integer> howIndexInTable(String category) throws SQLException {
         ArrayList<Integer> listID = new ArrayList<>();
-        ResultSet mealID = statement.executeQuery("SELECT * FROM meals " +
+        ResultSet mealID = statement.executeQuery("SELECT meal_id FROM meals " +
                 "WHERE category = '" + category + "'");
         while (mealID.next()) {
             listID.add(mealID.getInt("meal_id"));
         }
 
-        return listID.size();
+        return listID;
     }
+/* więc tak dajemy kategorie
+  każda kategoria łączy się ze składnikami po id
+  musimy uzyskać jakie id są w danej kategori a później po tym wywoływać
 
+ */
     public void showMealAndIngredientsForCategory(String category) throws SQLException {
 
-        int mealIDSize = howIndexInTable(category);
+        ArrayList<Integer> lisIdInCategory = howIndexInTable(category);
         System.out.println("Category: " + category);
         System.out.println();
-        for(int id = 1; id < mealIDSize; id++) {
+        for(int id : lisIdInCategory) {
             showNameMealForId(id);
             showIngredientsForId(id);
             System.out.println();
