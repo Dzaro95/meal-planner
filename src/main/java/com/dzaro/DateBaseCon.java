@@ -1,7 +1,6 @@
 package com.dzaro;
 
 import java.sql.*;
-import java.time.DayOfWeek;
 import java.util.*;
 
 
@@ -12,6 +11,20 @@ class DateBaseCon {
     private static final String PASS = "1111";
 
     int meal_id;
+
+    int id;
+/*
+    {
+        try {
+            id = generatedID();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+ */
+
+
     Connection connection;
     Statement statement;
     private UserAnswer userAnswer = new UserAnswer();
@@ -70,6 +83,16 @@ class DateBaseCon {
         }
     }
 
+    public int getMeal_id() throws SQLException{
+        int mealIDSelect = 0;
+        ResultSet mealID = statement.executeQuery("SELECT meal_id FROM meals");
+        while (mealID.next()) {
+            mealIDSelect = mealID.getInt("meal_id");
+        }
+        return ++mealIDSelect;
+
+    }
+
     public void startProgramTable() throws SQLException {
         DatabaseMetaData metaData = connection.getMetaData();
         // SQL - AUTO_INCREMENT, PRIMARY KEY, NOT NULL
@@ -91,6 +114,7 @@ class DateBaseCon {
     }
 
     public int generatedID() throws SQLException {
+
         PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
             if (generatedKeys.next()) {
@@ -101,12 +125,8 @@ class DateBaseCon {
         }
 
     }
-
-
     // Przy AUTO_INCREMENT pominąć dodawanie "meal_id", wartość zwiększy się automatycznie
 
-
-    // Inna nazwa, nazwa musi opisywać co robi metoda np. hasCategoryMeals(category)
     public boolean checkEmptyTable(String category) throws SQLException {
 
         ResultSet mealID = statement.executeQuery("SELECT meal_id " +

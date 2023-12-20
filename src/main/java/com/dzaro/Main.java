@@ -18,12 +18,14 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         List<Object> mealList = new ArrayList<>();
         boolean loop = true;
+
         try {
             dbCon.startProgramTable();
         } catch (Exception e) {
             e.printStackTrace();
         }
         System.out.println(meal.meal_id);
+        System.out.println(dbCon.meal_id);
         while(loop) {
             System.out.println("What would you like to do (add, show, plan, save, delete plan, exit)?");
             String choose = scanner.nextLine();

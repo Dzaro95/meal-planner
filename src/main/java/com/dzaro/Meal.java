@@ -7,6 +7,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Meal extends DateBaseCon{
+    int meal_id;
+
+    public Meal() {
+        try {
+            this.meal_id = getMeal_id();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     private ArrayList<String> ingredients = new ArrayList<>();
 
     public void showMeals(String category) throws SQLException {
@@ -23,14 +33,15 @@ public class Meal extends DateBaseCon{
 
     public void addMeal(String category, String meal) throws SQLException {
         String mealInsert = "INSERT INTO meals (meal_id, category, meal) VALUES (?,?,?)";
+        System.out.println(meal_id);
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(mealInsert)) {
-            preparedStatement.setInt(1, meal_id);
+            preparedStatement.setInt(1, this.meal_id);
             preparedStatement.setString(2, category);
             preparedStatement.setString(3, meal);
             preparedStatement.executeUpdate();
         }
-        System.out.println(meal_id);
+        System.out.println(this.meal_id);
     }
 
     public void addIngredients(ArrayList<String> array) throws SQLException {
@@ -39,13 +50,13 @@ public class Meal extends DateBaseCon{
         try (PreparedStatement preparedStatement = connection.prepareStatement(ingredientsInput)) {
             int ingredientsId = 1;
             for (String s : array) {
-                preparedStatement.setInt(1, meal_id);
+                preparedStatement.setInt(1, this.meal_id);
                 preparedStatement.setInt(2, ingredientsId++);
                 preparedStatement.setString(3, s);
                 preparedStatement.executeUpdate();
             }
         }
-        System.out.println(meal_id);
+        System.out.println(this.meal_id);
     }
 
     public void addMealAndIngriedientsForDB(String category, String meal, ArrayList<String> array) {
@@ -57,7 +68,7 @@ public class Meal extends DateBaseCon{
         }
 
 
-        meal_id++;
+        this.meal_id++;
 
     }
     public void showNameMealForId(int id) throws SQLException {
