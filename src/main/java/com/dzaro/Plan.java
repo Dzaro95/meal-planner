@@ -18,7 +18,7 @@ public class Plan extends DateBaseCon {
         String category = mealRS.getString("category");
         // System.out.println(dayOfTheWeek.get(mealRS.getInt("meal_id")));
         if (category.equalsIgnoreCase("breakfast")) {
-            System.out.println(UpperFirstLetter.upper(DayOfWeek.of(mealRS.getInt("plan_id")).toString()));
+            System.out.println(UpperFirstLetter.upper(DayOfWeek.of(mealRS.getInt("plan_id") + 1).toString()));
         }
         System.out.print(UpperFirstLetter.upper(category) + ": ");
         System.out.println(mealRS.getString("meal_option"));
