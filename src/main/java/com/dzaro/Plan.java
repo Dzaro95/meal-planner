@@ -1,5 +1,6 @@
 package com.dzaro;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.DayOfWeek;
@@ -61,10 +62,18 @@ public class Plan extends DateBaseCon {
 
     }
 
-    public boolean checkEmptyPlan() throws SQLException {
 
-        ResultSet mealID = statement.executeQuery("SELECT plan_id FROM plan");
-        return !mealID.next();
+
+    public void insertIntoPlan(int id, String category, String chooseMeal) throws SQLException {
+        String planInsert = "INSERT INTO plan (plan_id, category, meal_option) " +
+                "VALUES (?, ?, ?)";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(planInsert)) {
+            preparedStatement.setInt(1, id);
+            preparedStatement.setString(2,category.toString());
+            preparedStatement.setString(3, chooseMeal);
+            preparedStatement.executeUpdate();
+        }
+
     }
 
 }

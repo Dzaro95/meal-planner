@@ -39,7 +39,7 @@ public class Main {
                     System.out.println();
                     System.out.println("The meal has been added!");
                     try {
-                        dbCon.addMealAndIngriedientsForDB(addMeal.getSelectMealCategory(), addMeal.getMealName(), addMeal.getIngredients());
+                        meal.addMealAndIngriedientsForDB(addMeal.getSelectMealCategory(), addMeal.getMealName(), addMeal.getIngredients());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -60,7 +60,7 @@ public class Main {
                                         break;
                                     } else {
                                         System.out.println();
-                                        dbCon.showMealAndIngredientsForCategory(chooseCategory);
+                                        meal.showMealAndIngredientsForCategory(chooseCategory);
                                         loopShow = false;
                                         break;
                                     }

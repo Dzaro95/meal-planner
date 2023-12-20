@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 
 public class FileOperation extends DateBaseCon  {
+    Meal meal = new Meal();
     Scanner scanner = new Scanner(System.in);
     //String filePath;
     String fileName;
@@ -50,7 +51,7 @@ public class FileOperation extends DateBaseCon  {
         File file = new File(fileName);
         try (PrintWriter printWriter = new PrintWriter(file)) {
 
-            HashMap<String, Integer> ingredients = showIngredients();
+            HashMap<String, Integer> ingredients = meal.showIngredients();
             for (String key : ingredients.keySet()) {
                 if(ingredients.get(key) > 1) {
                     printWriter.println(key + " x" + ingredients.get(key));

@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Meal extends DateBaseCon{
     private ArrayList<String> ingredients = new ArrayList<>();
@@ -45,6 +46,84 @@ public class Meal extends DateBaseCon{
             }
         }
         System.out.println(meal_id);
+    }
+
+    public void addMealAndIngriedientsForDB(String category, String meal, ArrayList<String> array) {
+        try {
+            addMeal(category, meal);
+            addIngredients(array);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        meal_id++;
+
+    }
+    public void showNameMealForId(int id) throws SQLException {
+        ResultSet mealRS = statement.executeQuery("SELECT * FROM meals WHERE meal_id = " + id);
+        // Read the result set
+        //System.out.println("listID = " + listID.get(i) );
+        while (mealRS.next()) {
+            System.out.println("name: " + mealRS.getString("meal"));
+        }
+    }
+    public void showIngredientsForId(int id) throws SQLException {
+        ResultSet ingredientsRS = statement.executeQuery("SELECT * FROM ingredients WHERE meal_id = " + id);
+        System.out.println("Ingredients:");
+        while (ingredientsRS.next()) {
+            System.out.println(ingredientsRS.getString("ingredient"));
+        }
+    }
+
+    public void showMealAndIngredientsForCategory(String category) throws SQLException {
+
+        ArrayList<Integer> lisIdInCategory = listIndexInTable(category);
+        System.out.println("Category: " + category);
+        System.out.println();
+        for(int id : lisIdInCategory) {
+            showNameMealForId(id);
+            showIngredientsForId(id);
+            System.out.println();
+        }
+
+    }
+
+    public ArrayList<String> allIngredientsForMeal(String meal) throws SQLException {
+        ArrayList<String> ingredientsList = new ArrayList<>();
+        ResultSet mealRS = statement.executeQuery("SELECT * FROM meals WHERE meal = '" + meal + "'");
+        int id = 0;
+        while (mealRS.next()) {
+            id = mealRS.getInt("meal_id");
+        }
+        ResultSet ingredientsRS = statement.executeQuery("SELECT ingredient FROM ingredients WHERE meal_id = " + id);
+        while (ingredientsRS.next()) {
+            String list[] = ingredientsRS.getString("ingredient").split(",");
+            for (int k = 0; k < list.length; k++) {
+
+                ingredientsList.add(list[k]);
+            }
+        }
+        return ingredientsList;
+    }
+    public HashMap<String, Integer > showIngredients() throws SQLException {
+
+        HashMap<String, Integer> ingredientsMap = new HashMap<>();
+        ArrayList<String> mealList = allMealFromPlanInList();
+        ArrayList<String> ingredientsList = new ArrayList<>();
+        for (String meal : mealList) {
+            ingredientsList = allIngredientsForMeal(meal);
+        }
+        for(String ingredients : ingredientsList) {
+            if(ingredientsMap.containsKey(ingredients)) {
+                int value = ingredientsMap.get(ingredients);
+                ingredientsMap.put(ingredients,++value);
+
+            } else {
+                ingredientsMap.put(ingredients,1);
+            }
+        }
+        return ingredientsMap;
     }
 
 
