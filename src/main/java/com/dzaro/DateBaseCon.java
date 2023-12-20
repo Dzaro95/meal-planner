@@ -11,9 +11,9 @@ class DateBaseCon {
     private static final String USER = "postgres";
     private static final String PASS = "1111";
 
-    private int meal_id = 0;
-    private Connection connection;
-    private Statement statement;
+    int meal_id = 0;
+    Connection connection;
+    Statement statement;
     private UserAnswer userAnswer = new UserAnswer();
 
     public DateBaseCon()  {
@@ -70,7 +70,7 @@ class DateBaseCon {
             e.printStackTrace();
         }
     }
-
+/*
     public void showMeals(String category) throws SQLException {
         ResultSet mealRS = statement.executeQuery("SELECT * FROM meals " +
                 "WHERE category ='" + category + "'" +
@@ -82,6 +82,8 @@ class DateBaseCon {
         }
 
     }
+
+ */
 
     public void startProgramTable() throws SQLException {
         DatabaseMetaData metaData = connection.getMetaData();
@@ -130,7 +132,7 @@ class DateBaseCon {
         System.out.println(meal_id);
     }
     // Przy AUTO_INCREMENT pominąć dodawanie "meal_id", wartość zwiększy się automatycznie
-    public void addValue(String category, String meal, ArrayList<String> array) {
+    public void addMealAndIngriedientsForDB(String category, String meal, ArrayList<String> array) {
         try {
             addMeal(category, meal);
             addIngredients(array);
@@ -217,7 +219,7 @@ class DateBaseCon {
             }
         }
     }
-
+/*
     public void addPlanForAllDay() throws SQLException {
         // Rozbicie dużej metody
         cleanTablePlan();
@@ -250,6 +252,8 @@ class DateBaseCon {
         showPlannedPlan();
 
     }
+
+ */
 
     public boolean checkEmptyPlan() throws SQLException {
 

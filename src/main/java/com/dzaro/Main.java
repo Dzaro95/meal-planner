@@ -11,10 +11,12 @@ public class Main {
     public static void main(String[] args)  {
 
         Add addMeal;
+        Meal meal = new Meal();
+        Plan plan = new Plan();
         DateBaseCon dbCon = new DateBaseCon();
         FileOperation fileOperation;
         Scanner scanner = new Scanner(System.in);
-        List<Object> meal = new ArrayList<>();
+        List<Object> mealList = new ArrayList<>();
         boolean loop = true;
         try {
             dbCon.startProgramTable();
@@ -33,11 +35,11 @@ public class Main {
                     addMeal.instructionAddIngredients();
 
 
-                    meal.add(addMeal);
+                    mealList.add(addMeal);
                     System.out.println();
                     System.out.println("The meal has been added!");
                     try {
-                        dbCon.addValue(addMeal.getSelectMealCategory(), addMeal.getMealName(), addMeal.getIngredients());
+                        dbCon.addMealAndIngriedientsForDB(addMeal.getSelectMealCategory(), addMeal.getMealName(), addMeal.getIngredients());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -74,7 +76,7 @@ public class Main {
                     try {
                         if (dbCon.checkEmptyTable()) {
                             System.out.println();
-                            dbCon.addPlanForAllDay();
+                            plan.addPlanForAllDay();
                         } else {
                             System.out.println("First add meals in all category.");
                             dbCon.whichCategoryEmpty();
