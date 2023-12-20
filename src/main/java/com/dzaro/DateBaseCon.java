@@ -6,12 +6,12 @@ import java.util.*;
 
 
 class DateBaseCon {
-
-    private static final String DB_URL = "jdbc:postgresql:mealTest"; // main db = meals_db    test db = mealTest : copyMeals_db
+    private static String sql = "mealTest";
+    private static final String DB_URL = "jdbc:postgresql:" + sql; // main db = meals_db    test db = mealTest : copyMeals_db
     private static final String USER = "postgres";
     private static final String PASS = "1111";
 
-    int meal_id = 0;
+    int meal_id;
     Connection connection;
     Statement statement;
     private UserAnswer userAnswer = new UserAnswer();
@@ -43,7 +43,7 @@ class DateBaseCon {
             );
 
             statement.executeUpdate("CREATE TABLE ingredients (" +
-                    "meal_id integer NOT NULL PRIMARY KEY," +
+                    "meal_id integer NOT NULL," +
                     "ingredient_id integer NOT NULL," +
                     "ingredient varchar(100) NOT NULL)"
             );
@@ -79,15 +79,27 @@ class DateBaseCon {
         if (resultset.next() == false) {
             deleteAllTable();
             createAllTable();
-            meal_id = 1;
+            this.meal_id = 1;
         } else {
             int mealIDSelect = 0;
             ResultSet mealID = statement.executeQuery("SELECT meal_id FROM meals");
             while (mealID.next()) {
                 mealIDSelect = mealID.getInt("meal_id");
             }
-            meal_id = ++mealIDSelect;
+            this.meal_id = ++mealIDSelect;
         }
+    }
+
+    public int generatedID() throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+            if (generatedKeys.next()) {
+                return generatedKeys.getInt(1);
+            } else {
+                throw new SQLException("Failed to insert meal, no ID obtained.");
+            }
+        }
+
     }
 
 
