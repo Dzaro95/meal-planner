@@ -12,19 +12,6 @@ class DateBaseCon {
 
     int meal_id;
 
-    int id;
-/*
-    {
-        try {
-            id = generatedID();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
- */
-
-
     Connection connection;
     Statement statement;
     private UserAnswer userAnswer = new UserAnswer();
@@ -163,7 +150,7 @@ class DateBaseCon {
 
 
 
-    public boolean checkCategoryAndMeal(String category, String meal ) throws SQLException {
+    public boolean checkCorrectCategoryAndMeal(String category, String meal ) throws SQLException {
 
         ResultSet mealCheck = statement.executeQuery("SELECT * FROM meals " +
                 "WHERE category ='"+ category+ "' AND meal ='" + meal + "'");
@@ -171,7 +158,7 @@ class DateBaseCon {
     }
 
 
-    public ArrayList<Integer> listIndexInTable(String category) throws SQLException {
+    public ArrayList<Integer> listIdInTableForCategory(String category) throws SQLException {
         ArrayList<Integer> listID = new ArrayList<>();
         ResultSet mealID = statement.executeQuery("SELECT meal_id FROM meals " +
                 "WHERE category = '" + category + "'");

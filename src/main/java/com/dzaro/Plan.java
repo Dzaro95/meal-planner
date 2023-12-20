@@ -46,7 +46,7 @@ public class Plan extends DateBaseCon {
                         first++;
                     }
                     String chooseMeal = userAnswer.userAnswerString();
-                    if (checkCategoryAndMeal(category.toString().toLowerCase(), chooseMeal)) {
+                    if (checkCorrectCategoryAndMeal(category.toString().toLowerCase(), chooseMeal)) {
                         insertIntoPlan(day.ordinal(), category.toString(), chooseMeal);
                         first = 0;
                         break;

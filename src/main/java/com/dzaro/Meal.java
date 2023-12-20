@@ -88,10 +88,10 @@ public class Meal extends DateBaseCon{
 
     public void showMealAndIngredientsForCategory(String category) throws SQLException {
 
-        ArrayList<Integer> lisIdInCategory = listIndexInTable(category);
+        ArrayList<Integer> listId = listIdInTableForCategory(category);
         System.out.println("Category: " + category);
         System.out.println();
-        for(int id : lisIdInCategory) {
+        for(int id : listId) {
             showNameMealForId(id);
             showIngredientsForId(id);
             System.out.println();
