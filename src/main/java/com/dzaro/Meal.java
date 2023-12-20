@@ -33,7 +33,6 @@ public class Meal extends DateBaseCon{
 
     public void addMeal(String category, String meal) throws SQLException {
         String mealInsert = "INSERT INTO meals (meal_id, category, meal) VALUES (?,?,?)";
-        System.out.println(meal_id);
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(mealInsert)) {
             preparedStatement.setInt(1, this.meal_id);
@@ -41,7 +40,7 @@ public class Meal extends DateBaseCon{
             preparedStatement.setString(3, meal);
             preparedStatement.executeUpdate();
         }
-        System.out.println(this.meal_id);
+        //System.out.println(this.meal_id);
     }
 
     public void addIngredients(ArrayList<String> array) throws SQLException {
@@ -56,7 +55,7 @@ public class Meal extends DateBaseCon{
                 preparedStatement.executeUpdate();
             }
         }
-        System.out.println(this.meal_id);
+        //System.out.println(this.meal_id);
     }
 
     public void addMealAndIngriedientsForDB(String category, String meal, ArrayList<String> array) {
