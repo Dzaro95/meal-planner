@@ -90,7 +90,7 @@ class DateBaseCon {
 
         // checking if ResultSet is empty
         if (resultset.next() == false) {
-
+            deleteAllTable();
             createAllTable();
             meal_id = 1;
         } else {
