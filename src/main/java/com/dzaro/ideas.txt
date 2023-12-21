@@ -1,0 +1,4 @@
+1.Dodanie planu tylko dla danego dnia
+2.Zapisanie planu do pliku tylko dla danego dnia
+3.Usunięcie planu dla danego dnia
+4.Zmiana formatu zapisu pliku

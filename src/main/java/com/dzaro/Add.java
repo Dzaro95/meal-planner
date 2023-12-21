@@ -77,6 +77,14 @@ class Add  {
         }
     }
 
+    public ArrayList<String> deleteWhiteSpace(ArrayList<String> array) {
+        ArrayList<String> arrayWithoutWhiteSpace = new ArrayList<>();
+        for(String word : array) {
+            arrayWithoutWhiteSpace.add(word.trim());
+        }
+        return arrayWithoutWhiteSpace;
+    }
+
     public void instructionAddIngredients() {
 
         boolean l = true;
@@ -86,7 +94,9 @@ class Add  {
             ingrediensBefore = scanner.nextLine();
 
             if (checkWord(ingrediensBefore.replaceAll("\\s+", ""))) {
-                ArrayList<String> separateIngredients = new ArrayList<>(List.of(ingrediensBefore.split(", ")));
+                //ingrediensBefore = ingrediensBefore.replaceAll("\\s+", "");
+                ArrayList<String> separateIngredients = new ArrayList<>(List.of(ingrediensBefore.split(",")));
+                separateIngredients = deleteWhiteSpace(separateIngredients);
                 this.ingredients = separateIngredients;
                 l = false;
             } else {
@@ -94,10 +104,6 @@ class Add  {
             }
         }
     }
-
-
-
-
 
     @Override
     public String toString() {

@@ -9,13 +9,14 @@ import java.util.Scanner;
 
 
 public class FileOperation extends DateBaseCon  {
+    Meal meal = new Meal();
     Scanner scanner = new Scanner(System.in);
-    String filePath;
+    //String filePath;
     String fileName;
 
 
     public FileOperation() throws SQLException {
-        if(checkPlan()) {
+        if(checkEmptyPlan()) {
             System.out.println("Unable to save. Plan your meals first.");
         } else {
             System.out.println("Input a filename:");
@@ -24,9 +25,12 @@ public class FileOperation extends DateBaseCon  {
             saveIngredients();
         }
     }
+    /*
     public boolean checkPlan() throws SQLException {
         return checkEmptyPlan();
     }
+
+     */
     public void createFile(String fileName) {
         try {
             //filePath = "C:\\Users\\dom\\Desktop\\Java\\Ingredients\\" + fileName;
@@ -47,21 +51,20 @@ public class FileOperation extends DateBaseCon  {
         File file = new File(fileName);
         try (PrintWriter printWriter = new PrintWriter(file)) {
 
-            HashMap<String, Integer> ingredients = showIngredients();
+            HashMap<String, Integer> ingredients = meal.showIngredients();
             for (String key : ingredients.keySet()) {
                 if(ingredients.get(key) > 1) {
                     printWriter.println(key + " x" + ingredients.get(key));
                     //System.out.println(key + " x" + ingredients.get(key));
                 } else {
                     printWriter.println(key);
-                    //System.out.println(key);
                 }
             }
 
             System.out.println("Saved!");
 
         } catch (IOException e) {
-
+            e.printStackTrace();
         }
     }
 
