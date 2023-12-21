@@ -1,6 +1,5 @@
 package com.dzaro;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -11,7 +10,7 @@ public class Main {
     public static void main(String[] args)  {
 
         Add addMeal;
-        Meal meal = new Meal();
+        MealDAO meal = new MealDAO();
         Plan plan = new Plan();
         DateBaseCon dbCon = new DateBaseCon();
         FileOperation fileOperation;

@@ -4,9 +4,22 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.DayOfWeek;
+import java.util.HashMap;
 
+public class WeeklyPlan() {
+
+    Map<DayOfWeek, DailyPlan> plan = new HashMap<>();
+
+    public void addDailyPlan(DayOfWeek dayOfWeek,DailyPlan dailyPlan) {
+        // dodawanie do mapy plan
+    }
+
+}
+
+
+// PlanDAO - opracje na obiekcie WeeklyPlan
 public class Plan extends DateBaseCon {
-    Meal meal = new Meal();
+    MealDAO meal = new MealDAO();
     UserAnswer userAnswer = new UserAnswer();
     public void showPlannedPlan() throws SQLException {
     ResultSet mealRS = statement.executeQuery("SELECT * FROM plan");

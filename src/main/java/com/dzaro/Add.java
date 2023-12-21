@@ -9,6 +9,8 @@ class Add  {
     private String selectMealCategory;
     private String mealName;
     private ArrayList<String> ingredients;
+
+
     Scanner scanner = new Scanner(System.in);
     List<Object> meal = new ArrayList<>();
     public Add() {

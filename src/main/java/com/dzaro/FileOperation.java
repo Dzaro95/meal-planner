@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 
 public class FileOperation extends DateBaseCon  {
-    Meal meal = new Meal();
+    MealDAO meal = new MealDAO();
     Scanner scanner = new Scanner(System.in);
     //String filePath;
     String fileName;

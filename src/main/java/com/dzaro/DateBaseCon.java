@@ -37,7 +37,7 @@ class DateBaseCon {
     public void createAllTable() {
         try {
             statement.executeUpdate("CREATE TABLE meals (" +
-                    "meal_id integer NOT NULL PRIMARY KEY," + // meal_id INTEGER NOT NULL AUTO_INCREMENT
+                    "meal_id serial NOT NULL PRIMARY KEY," +
                     "category varchar(100) NOT NULL," +
                     "meal varchar(100) NOT NULL)"
             );
