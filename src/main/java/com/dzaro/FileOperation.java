@@ -57,6 +57,7 @@ public class FileOperation extends DateBaseCon  {
             Map<DayOfWeek, List<DailyPlan>> fullPlan = savePlan.getSavePlan();
             for (DayOfWeek day : DayOfWeek.values()) {
                 printWriter.println(UpperFirstLetter.upper(day.toString()));
+                printWriter.println();
                 List<DailyPlan> plan = fullPlan.get(day);
                    for (DailyPlan plan1 : plan) {
                        printWriter.println("Category: " + plan1.getCategory());
