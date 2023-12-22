@@ -56,8 +56,6 @@ public class MealDAO extends DateBaseCon {
                 }
             }
         }
-
-        //System.out.println(this.meal_id);
     }
 
     private void addIngredients(int mealId, List<String> array) throws SQLException {
@@ -75,16 +73,13 @@ public class MealDAO extends DateBaseCon {
         //System.out.println(this.meal_id);
     }
 
-    public void addMealAndIngriedientsForDB(String category, String meal, ArrayList<String> array) {
+    public void addMealAndIngriedientsForDB(Meal meal) {
         try {
-            addMeal(category, meal);
-            addIngredients(array);
+            addMeal(meal.getCategory(), meal.getNameMeal(), meal.getIngredients());
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-
-        this.meal_id++;
 
     }
 

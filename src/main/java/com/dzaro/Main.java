@@ -9,13 +9,12 @@ public class Main {
 
     public static void main(String[] args)  {
 
-        Add addMeal;
+        AddMealInterface addMeal;
+        UserAnswer userAnswer = new UserAnswer();
         MealDAO meal = new MealDAO();
         Plan plan = new Plan();
         DateBaseCon dbCon = new DateBaseCon();
         FileOperation fileOperation;
-        Scanner scanner = new Scanner(System.in);
-        List<Object> mealList = new ArrayList<>();
         boolean loop = true;
 
         try {
@@ -25,30 +24,23 @@ public class Main {
         }
         while(loop) {
             System.out.println("What would you like to do (add, show, plan, save, delete plan, exit)?");
-            String choose = scanner.nextLine();
+            String choose = userAnswer.userAnswerString();
 
             switch(choose){
                 case ("add"):
-                    addMeal = new Add();
-                    addMeal.instructionAddMealCategory();
-                    addMeal.instructionAddMeal();
-                    addMeal.instructionAddIngredients();
-
-
-                    mealList.add(addMeal);
                     System.out.println();
-                    System.out.println("The meal has been added!");
                     try {
-                        meal.addMealAndIngriedientsForDB(addMeal.getSelectMealCategory(), addMeal.getMealName(), addMeal.getIngredients());
+                        meal.addMealAndIngriedientsForDB(userAnswer.collectMeal());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                    System.out.println("The meal has been added!");
                     break;
                 case ("show"):
                     System.out.println("Which category do you want to print (breakfast, lunch, dinner)?");
                     boolean loopShow = true;
                     while(loopShow) {
-                        String chooseCategory = scanner.nextLine().toLowerCase();
+                        String chooseCategory = userAnswer.userAnswerString().toLowerCase();
                         switch (chooseCategory) {
                             case ("breakfast"):
                             case ("lunch"):
@@ -76,7 +68,7 @@ public class Main {
                     try {
                         if (dbCon.checkEmptyTable()) {
                             System.out.println();
-                            plan.addPlanForAllDay();
+                            //plan.addPlanForAllDay();
                         } else {
                             System.out.println("First add meals in all category.");
                             dbCon.whichCategoryEmpty();
