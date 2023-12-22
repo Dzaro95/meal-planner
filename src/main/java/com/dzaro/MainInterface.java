@@ -8,7 +8,6 @@ public class MainInterface {
         UserAnswer userAnswer = new UserAnswer();
         MealDAO mealDAO = new MealDAO();
         PlanInterface planInterface = new PlanInterface();
-        Plan plan;
         DateBaseCon dbCon = new DateBaseCon();
         FileOperation fileOperation;
         boolean loop = true;

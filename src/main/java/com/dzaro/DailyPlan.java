@@ -3,11 +3,11 @@ package com.dzaro;
 public class DailyPlan {
 
     String category;
-    String meal;
+    String meal_option;
 
     public DailyPlan(String category, String meal) {
         this.category = category;
-        this.meal = meal;
+        this.meal_option = meal;
     }
 
     public String getCategory() {
@@ -15,6 +15,6 @@ public class DailyPlan {
     }
 
     public String getMeal() {
-        return meal;
+        return meal_option;
     }
 }

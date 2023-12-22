@@ -12,8 +12,6 @@ public class PlanDAO extends DateBaseCon {
         ResultSet mealRS = statement.executeQuery("SELECT * FROM plan");
         // Read the result set
         //System.out.println("listID = " + listID.get(i) );
-
-
         while (mealRS.next()) {
             String category = mealRS.getString("category");
             // System.out.println(dayOfTheWeek.get(mealRS.getInt("meal_id")));
@@ -28,86 +26,27 @@ public class PlanDAO extends DateBaseCon {
             }
         }
     }
-/*
-    public void addPlanForAllDay() throws SQLException {
-        // Rozbicie dużej metody
-        cleanTablePlan();
-        for (DayOfWeek day : DayOfWeek.values()) {
 
-            System.out.println(UpperFirstLetter.upper(day.toString()));
-            for(Category category : Category.values()) {
-                int first = 0;
-                while(true) {
-                    mealDAO.showMeals(category.toString().toLowerCase());
-                    if (first == 0) {
-                        System.out.println("Choose the " +category.toString().toLowerCase() + " for " + UpperFirstLetter.upper(day.toString()) +
-                                " from the list above:");
-                        first++;
-                    }
-                    String chooseMeal = scanner.nextLine();
-                    if (checkCorrectCategoryAndMeal(category.toString().toLowerCase(), chooseMeal)) {
-                        insertIntoPlan(day.ordinal(), category.toString(), chooseMeal);
-                        userAnswer.collectPlan(day);
-                        first = 0;
-                        break;
-                    } else {
-                        System.out.println("This meal doesn’t exist. Choose a meal from the list above.");
-                    }
-                }
-            }
-            System.out.println("Yeah! We planned the meals for " + UpperFirstLetter.upper(day.toString()) + ".");
-            System.out.println();
-        }
-        showPlannedPlan();
 
-    }
 
-    public void insertIntoPlan(Plan Plan) throws SQLException {
+    public void insertIntoPlan(int id, DailyPlan dailyplan) throws SQLException {
         String planInsert = "INSERT INTO plan (plan_id, category, meal_option) " +
                 "VALUES (?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(planInsert)) {
             preparedStatement.setInt(1, id);
-            preparedStatement.setString(2,category.toString());
-            preparedStatement.setString(3, chooseMeal);
-            preparedStatement.executeUpdate();
-        }
-    }
-
- */
-
-   /* public void insertIntoPlan(int id, String category, String chooseMeal) throws SQLException {
-        String planInsert = "INSERT INTO plan (plan_id, category, meal_option) " +
-                "VALUES (?, ?, ?)";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(planInsert)) {
-            preparedStatement.setInt(1, id);
-            preparedStatement.setString(2,category.toString());
-            preparedStatement.setString(3, chooseMeal);
+            preparedStatement.setString(2, dailyplan.category);
+            preparedStatement.setString(3, dailyplan.meal_option);
             preparedStatement.executeUpdate();
         }
     }
 
 
-    public void collectCategoryName(String day,String category) {
-        while(true) {
-            mealDAO.showMeals(category.toString().toLowerCase());
-            if (first == 0) {
-                System.out.println("Choose the " +category.toString().toLowerCase() + " for " + UpperFirstLetter.upper(day.toString()) +
-                        " from the list above:");
-                first++;
-            }
-            String chooseMeal = scanner.nextLine();
-            if (checkCorrectCategoryAndMeal(category.toString().toLowerCase(), chooseMeal)) {
-                insertIntoPlan(day.ordinal(), category.toString(), chooseMeal);
 
-                first = 0;
-                break;
-            } else {
-                System.out.println("This meal doesn’t exist. Choose a meal from the list above.");
-            }
-        }
-    }
 
-    */
+
+
+
+
 
 
 }
