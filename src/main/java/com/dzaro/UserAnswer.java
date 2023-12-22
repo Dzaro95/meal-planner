@@ -1,10 +1,13 @@
 package com.dzaro;
 
+import java.sql.SQLException;
+import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class UserAnswer {
-    AddMealInterface addMealInterface = new AddMealInterface();
+    SetMealInterface setMealInterface = new SetMealInterface();
     Scanner scanner = new Scanner(System.in);
 
     public UserAnswer() {
@@ -16,19 +19,22 @@ public class UserAnswer {
     }
 
     public Meal collectMeal() {
-        String category = addMealInterface.setCategory();
-        String name = addMealInterface.setMealName();
-        List<String> ingredients = addMealInterface.setIngredients();
+        String category = setMealInterface.setCategory();
+        String name = setMealInterface.setMealName();
+        List<String> ingredients = setMealInterface.setIngredients();
 
         return new Meal(category, name, ingredients);
     }
+
+
+
+
+    public Plan collectPlan(DayOfWeek dayOfWeek,String category,String meal) {
+
+        return new Plan(dayOfWeek,new DailyPlan( category,meal));
+    }
 }
 /*
-    public Plan collectPlan() {
-
-    }
-
-
     public void collectCategoryName(String day,String category) {
         while(true) {
             meal.showMeals(category.toString().toLowerCase());

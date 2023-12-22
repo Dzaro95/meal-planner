@@ -11,6 +11,7 @@ import java.util.List;
 // Data Access Object
 // Inserty, Selecty itp.
 public class MealDAO extends DateBaseCon {
+    Meal meal;
    // int meal_id;
 
     public MealDAO() {
@@ -21,7 +22,7 @@ public class MealDAO extends DateBaseCon {
         }*/
     }
 
-    private ArrayList<String> ingredients = new ArrayList<>();
+    private List<Meal> mealFromDateBase = new ArrayList<>();
 
     public void showMeals(String category) throws SQLException {
         ResultSet mealRS = statement.executeQuery("SELECT * FROM meals " +
@@ -106,33 +107,34 @@ public class MealDAO extends DateBaseCon {
 
     // Osobna klasa np. MealPrinter etc. MealPrinter::printMeal(Meal meal), printPlan(Plan plan)
 
-    public void showNameMealForId(int id) throws SQLException {
+    public String showNameMealForId(int id) throws SQLException {
         ResultSet mealRS = statement.executeQuery("SELECT * FROM meals WHERE meal_id = " + id);
+        String nameMeal = null;
         // Read the result set
         //System.out.println("listID = " + listID.get(i) );
         while (mealRS.next()) {
-            System.out.println("name: " + mealRS.getString("meal"));
+            nameMeal = mealRS.getString("meal");
         }
+        return nameMeal;
     }
 
-    public void showIngredientsForId(int id) throws SQLException {
+    public List<String> getIngredientsListForId(int id) throws SQLException {
+        List<String> ingredientsList = new ArrayList<>();
         ResultSet ingredientsRS = statement.executeQuery("SELECT * FROM ingredients WHERE meal_id = " + id);
-        System.out.println("Ingredients:");
         while (ingredientsRS.next()) {
-            System.out.println(ingredientsRS.getString("ingredient"));
+            ingredientsList.add(ingredientsRS.getString("ingredient"));
         }
+        return ingredientsList;
     }
 
-    public void showMealAndIngredientsForCategory(String category) throws SQLException {
-
-        ArrayList<Integer> listId = listIdInTableForCategory(category);
-        System.out.println("Category: " + category);
+    public List<Meal> getMealAndIngredientsForCategory(String category) throws SQLException {
+        List<Meal> getMealList = new ArrayList<>();
+        List<Integer> listId = listIdInTableForCategory(category);
         System.out.println();
         for(int id : listId) {
-            showNameMealForId(id);
-            showIngredientsForId(id);
-            System.out.println();
+            getMealList.add(new Meal(id,category,showNameMealForId(id),getIngredientsListForId(id)));
         }
+        return getMealList;
 
     }
 
