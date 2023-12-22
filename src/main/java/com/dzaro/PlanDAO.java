@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.DayOfWeek;
+import java.util.*;
 
 public class PlanDAO extends DateBaseCon {
     MealDAO mealDAO = new MealDAO();
@@ -26,8 +27,18 @@ public class PlanDAO extends DateBaseCon {
             }
         }
     }
+    public  List<DailyPlan> getPlanForDay(DayOfWeek day) throws SQLException {
+        List<DailyPlan> dailyList = new ArrayList<>();
+        int id = day.getValue() - 1;
+        ResultSet mealRS = statement.executeQuery("SELECT * FROM plan WHERE plan_id = " + id);
+        while (mealRS.next()) {
+            String category = mealRS.getString("category");
+            String meal = mealRS.getString("meal_option");
+            dailyList.add(userAnswer.setSavePlan(category,meal));
+        }
 
-
+        return dailyList;
+    }
 
     public void insertIntoPlan(int id, DailyPlan dailyplan) throws SQLException {
         String planInsert = "INSERT INTO plan (plan_id, category, meal_option) " +
@@ -39,7 +50,37 @@ public class PlanDAO extends DateBaseCon {
             preparedStatement.executeUpdate();
         }
     }
+    public ArrayList<String> allMealFromPlanInList() throws SQLException{
+        ArrayList<String> allMealFromPlanList = new ArrayList<>();
+        ResultSet meal_option = statement.executeQuery("SELECT meal_option FROM plan");
+        while (meal_option.next()) {
+            String meal = meal_option.getString("meal_option");
+            allMealFromPlanList.add(meal);
+        }
+        return allMealFromPlanList;
+    }
 
+/*
+    public Map<String, Integer > showIngredients() throws SQLException {
+
+        Map<String, Integer> ingredientsMap = new HashMap<>();
+        ArrayList<String> mealList = allMealFromPlanInList();
+        ArrayList<String> ingredientsList = new ArrayList<>();
+        for (String meal : mealList) {
+            ingredientsList = mealDAO.allIngredientsForMeal(meal);
+        }
+        for(String ingredients : ingredientsList) {
+            if(ingredientsMap.containsKey(ingredients)) {
+                int value = ingredientsMap.get(ingredients);
+                ingredientsMap.put(ingredients,++value);
+
+            } else {
+                ingredientsMap.put(ingredients,1);
+            }
+        }
+        return ingredientsMap;
+    }
+ */
 
 
 

@@ -4,13 +4,17 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.time.DayOfWeek;
 import java.util.HashMap;
-import java.util.Scanner;
+import java.util.List;
+import java.util.Map;
 
 
 public class FileOperation extends DateBaseCon  {
-    MealDAO meal = new MealDAO();
-    Scanner scanner = new Scanner(System.in);
+    MealDAO mealDAO = new MealDAO();
+    PlanDAO planDAO = new PlanDAO();
+    SavePlan savePlan = new SavePlan();
+    UserAnswer userAnswer = new UserAnswer();
     //String filePath;
     String fileName;
 
@@ -20,9 +24,9 @@ public class FileOperation extends DateBaseCon  {
             System.out.println("Unable to save. Plan your meals first.");
         } else {
             System.out.println("Input a filename:");
-            String fileName = scanner.nextLine();
+            String fileName = userAnswer.userAnswerString();
             createFile(fileName);
-            saveIngredients();
+            savePlanFile();
         }
     }
     /*
@@ -47,11 +51,33 @@ public class FileOperation extends DateBaseCon  {
         }
     }
 
+    public void savePlanFile() throws SQLException {
+        File file = new File(fileName);
+        try (PrintWriter printWriter = new PrintWriter(file)) {
+            Map<DayOfWeek, List<DailyPlan>> fullPlan = savePlan.getSavePlan();
+            for (DayOfWeek day : DayOfWeek.values()) {
+                printWriter.println(UpperFirstLetter.upper(day.toString()));
+                List<DailyPlan> plan = fullPlan.get(day);
+                   for (DailyPlan plan1 : plan) {
+                       printWriter.println("Category: " + plan1.getCategory());
+                       printWriter.println("Meal: " + plan1.getMeal());
+                       printWriter.println("Ingredients: ");
+                       mealDAO.allIngredientsForMeal(plan1.getMeal()).forEach(ingriedient -> printWriter.println(ingriedient));
+                       printWriter.println();
+                   }
+            }
+
+            System.out.println("Saved!");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+/*
     public void saveIngredients() throws SQLException {
         File file = new File(fileName);
         try (PrintWriter printWriter = new PrintWriter(file)) {
-
-            HashMap<String, Integer> ingredients = meal.showIngredients();
+            Map<String, Integer> ingredients = meal.showIngredients();
             for (String key : ingredients.keySet()) {
                 if(ingredients.get(key) > 1) {
                     printWriter.println(key + " x" + ingredients.get(key));
@@ -68,5 +94,7 @@ public class FileOperation extends DateBaseCon  {
         }
     }
 
+
+ */
 
 }

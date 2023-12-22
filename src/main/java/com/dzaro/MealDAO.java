@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 // Data Access Object
 // Inserty, Selecty itp.
@@ -138,7 +139,7 @@ public class MealDAO extends DateBaseCon {
 
     }
 
-    public ArrayList<String> allIngredientsForMeal(String meal) throws SQLException {
+    public List<String> allIngredientsForMeal(String meal) throws SQLException {
         ArrayList<String> ingredientsList = new ArrayList<>();
         ResultSet mealRS = statement.executeQuery("SELECT * FROM meals WHERE meal = '" + meal + "'");
         int id = 0;
@@ -155,28 +156,5 @@ public class MealDAO extends DateBaseCon {
         }
         return ingredientsList;
     }
-    public HashMap<String, Integer > showIngredients() throws SQLException {
-
-        HashMap<String, Integer> ingredientsMap = new HashMap<>();
-        ArrayList<String> mealList = allMealFromPlanInList();
-        ArrayList<String> ingredientsList = new ArrayList<>();
-        for (String meal : mealList) {
-            ingredientsList = allIngredientsForMeal(meal);
-        }
-        for(String ingredients : ingredientsList) {
-            if(ingredientsMap.containsKey(ingredients)) {
-                int value = ingredientsMap.get(ingredients);
-                ingredientsMap.put(ingredients,++value);
-
-            } else {
-                ingredientsMap.put(ingredients,1);
-            }
-        }
-        return ingredientsMap;
-    }
-
-
-
-
 
 }

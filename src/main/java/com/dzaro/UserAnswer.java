@@ -26,6 +26,13 @@ public class UserAnswer {
         return new Meal(category, name, ingredients);
     }
 
+    public DailyPlan setSavePlan(String category, String meal) {
+
+        return new DailyPlan(UpperFirstLetter.upper(category),meal);
+    }
+
+
+
     public DailyPlan collectPlan ( String category, String mealOption) {
         return new DailyPlan(category, mealOption);
     }
