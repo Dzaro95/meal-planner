@@ -1,11 +1,19 @@
 package com.dzaro;
 
-public class MainInterface {
+import com.dzaro.add.AddMealUseCase;
+import com.dzaro.add.SetMealUseCase;
+import com.dzaro.dateBase.DateBaseCon;
+import com.dzaro.dateBase.MealDAO;
+import com.dzaro.plan.PlanInterface;
+import com.dzaro.save.FileOperation;
+import com.dzaro.show.ShowCategoryInterface;
+
+public class MainProgram {
     public static void startProgram() {
-        AddMealInterface addMealInterface = new AddMealInterface();
-        SetMealInterface addMeal;
+        AddMealUseCase addMealUseCase = new AddMealUseCase();
+        SetMealUseCase addMeal;
         ShowCategoryInterface showCategoryInterface = new ShowCategoryInterface();
-        UserAnswer userAnswer = new UserAnswer();
+        UserInputHandler userInputHandler = new UserInputHandler();
         MealDAO mealDAO = new MealDAO();
         PlanInterface planInterface = new PlanInterface();
         DateBaseCon dbCon = new DateBaseCon();
@@ -19,10 +27,10 @@ public class MainInterface {
         }
         while (loop) {
             System.out.println("What would you like to do (add, show, plan, save, delete plan, exit)?");
-            String choose = userAnswer.userAnswerString();
+            String choose = userInputHandler.userAnswerString();
             switch (choose) {
                 case ("add"):
-                    addMealInterface.start();
+                    addMealUseCase.start();
                     break;
                 case ("show"):
                     showCategoryInterface.start();

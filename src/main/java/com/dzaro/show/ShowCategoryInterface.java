@@ -1,11 +1,16 @@
-package com.dzaro;
+package com.dzaro.show;
+
+import com.dzaro.*;
+import com.dzaro.dateBase.DateBaseCon;
+import com.dzaro.dateBase.MealDAO;
+import com.dzaro.dateBase.PlanDAO;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ShowCategoryInterface {
-    UserAnswer userAnswer = new UserAnswer();
+    UserInputHandler userInputHandler = new UserInputHandler();
     MealDAO mealDAO = new MealDAO();
     PlanDAO planDAO = new PlanDAO();
     DateBaseCon dbCon = new DateBaseCon();
@@ -14,7 +19,7 @@ public class ShowCategoryInterface {
         System.out.println("Which category do you want to print (breakfast, lunch, dinner, plan)?");
         boolean loopShow = true;
         while(loopShow) {
-            String chooseCategory = userAnswer.userAnswerString().toLowerCase();
+            String chooseCategory = userInputHandler.userAnswerString().toLowerCase();
             switch (chooseCategory) {
                 case ("breakfast"):
                 case ("lunch"):

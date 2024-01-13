@@ -1,12 +1,13 @@
-package com.dzaro;
+package com.dzaro.plan;
 
 import java.util.List;
 
+
 public class DailyPlan {
 
-    String category;
-    String meal_option;
-    List<String> ingredients;
+    private String category;
+    private String meal_option;
+    private List<String> ingredients;
 
     public DailyPlan(String category, String meal) {
         this.category = category;
@@ -31,3 +32,5 @@ public class DailyPlan {
         return ingredients;
     }
 }
+
+

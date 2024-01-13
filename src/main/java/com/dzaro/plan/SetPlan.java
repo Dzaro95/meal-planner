@@ -1,4 +1,11 @@
-package com.dzaro;
+package com.dzaro.plan;
+
+import com.dzaro.Category;
+import com.dzaro.UpperFirstLetter;
+import com.dzaro.UserInputHandler;
+import com.dzaro.dateBase.DateBaseCon;
+import com.dzaro.dateBase.MealDAO;
+import com.dzaro.dateBase.PlanDAO;
 
 import java.sql.SQLException;
 import java.time.DayOfWeek;
@@ -7,7 +14,7 @@ public class SetPlan {
 
     PlanDAO planDAO = new PlanDAO();
     MealDAO mealDAO = new MealDAO();
-    UserAnswer userAnswer = new UserAnswer();
+    UserInputHandler userInputHandler = new UserInputHandler();
     DateBaseCon dateBaseCon = new DateBaseCon();
     public void addPlanForAllDay() throws SQLException {
         dateBaseCon.cleanTablePlan();
@@ -30,9 +37,9 @@ public class SetPlan {
 
             mealDAO.showMeals(category.toString().toLowerCase());
 
-            String mealOption = userAnswer.userAnswerString();
+            String mealOption = userInputHandler.userAnswerString();
             if (dateBaseCon.checkCorrectCategoryAndMeal(category.toString().toLowerCase(), mealOption)) {
-                planDAO.insertIntoPlan(day.ordinal(), userAnswer.collectPlan(category,mealOption));
+                planDAO.insertIntoPlan(day.ordinal(), userInputHandler.collectPlan(category,mealOption));
                 break;
             } else {
                 System.out.println("This meal doesn’t exist. Choose a meal from the list above.");

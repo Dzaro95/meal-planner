@@ -1,4 +1,7 @@
-package com.dzaro;
+package com.dzaro.plan;
+
+import com.dzaro.dateBase.DateBaseCon;
+import com.dzaro.dateBase.PlanDAO;
 
 public class PlanInterface {
     DateBaseCon dbCon = new DateBaseCon();

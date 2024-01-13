@@ -1,14 +1,16 @@
-package com.dzaro;
+package com.dzaro.add;
 
-import java.util.ArrayList;
+import com.dzaro.SpellingCheck;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class SetMealInterface {
+public class SetMealUseCase {
     Scanner scanner = new Scanner(System.in);
     SpellingCheck spellingCheck = new SpellingCheck();
 
-    public SetMealInterface() {
+    public SetMealUseCase() {
     }
 
     public String setCategory() {
@@ -47,24 +49,16 @@ public class SetMealInterface {
     }
 
     public List<String> setIngredients() {
-        List<String> ingredients = new ArrayList<>();
-        boolean l = true;
-        String ingrediensBefore = null;
         System.out.println("Input the ingredients:");
-        while (l) {
-            ingrediensBefore = scanner.nextLine();
-
-            if (spellingCheck.checkWord (ingrediensBefore.replaceAll("\\s+", ""))) {
-                //ingrediensBefore = ingrediensBefore.replaceAll("\\s+", "");
-                ArrayList<String> separateIngredients = new ArrayList<>(List.of(ingrediensBefore.split(",")));
-                separateIngredients = spellingCheck.deleteWhiteSpace(separateIngredients);
-                ingredients = separateIngredients;
-                l = false;
+        while (true) {
+            String ingredientsInput = scanner.nextLine();
+            List<String> ingredients = Arrays.stream(ingredientsInput.split(",")).map(String::trim).toList();
+            if (ingredients.stream().allMatch(spellingCheck::checkWord)) {
+                return ingredients;
             } else {
                 System.out.println("Wrong format. Use letters only!");
             }
         }
-        return ingredients;
     }
 
 

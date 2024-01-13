@@ -1,4 +1,7 @@
-package com.dzaro;
+package com.dzaro.dateBase;
+
+import com.dzaro.*;
+import com.dzaro.plan.DailyPlan;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,7 +11,7 @@ import java.util.*;
 
 public class PlanDAO extends DateBaseCon {
     MealDAO mealDAO = new MealDAO();
-    UserAnswer userAnswer = new UserAnswer();
+    UserInputHandler userInputHandler = new UserInputHandler();
     public void showPlannedPlan() throws SQLException {
         ResultSet mealRS = statement.executeQuery("SELECT * FROM plan");
         // Read the result set
@@ -34,7 +37,7 @@ public class PlanDAO extends DateBaseCon {
         while (mealRS.next()) {
             String category = mealRS.getString("category");
             String meal = mealRS.getString("meal_option");
-            dailyList.add(userAnswer.setSavePlan(category,meal));
+            dailyList.add(userInputHandler.setSavePlan(category,meal));
         }
 
         return dailyList;
@@ -45,8 +48,8 @@ public class PlanDAO extends DateBaseCon {
                 "VALUES (?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(planInsert)) {
             preparedStatement.setInt(1, id);
-            preparedStatement.setString(2, dailyplan.category);
-            preparedStatement.setString(3, dailyplan.meal_option);
+            preparedStatement.setString(2, dailyplan.getCategory());
+            preparedStatement.setString(3, dailyplan.getMeal());
             preparedStatement.executeUpdate();
         }
     }
@@ -59,36 +62,5 @@ public class PlanDAO extends DateBaseCon {
         }
         return allMealFromPlanList;
     }
-
-/*
-    public Map<String, Integer > showIngredients() throws SQLException {
-
-        Map<String, Integer> ingredientsMap = new HashMap<>();
-        ArrayList<String> mealList = allMealFromPlanInList();
-        ArrayList<String> ingredientsList = new ArrayList<>();
-        for (String meal : mealList) {
-            ingredientsList = mealDAO.allIngredientsForMeal(meal);
-        }
-        for(String ingredients : ingredientsList) {
-            if(ingredientsMap.containsKey(ingredients)) {
-                int value = ingredientsMap.get(ingredients);
-                ingredientsMap.put(ingredients,++value);
-
-            } else {
-                ingredientsMap.put(ingredients,1);
-            }
-        }
-        return ingredientsMap;
-    }
- */
-
-
-
-
-
-
-
-
-
 }
 

@@ -1,20 +1,25 @@
-package com.dzaro;
+package com.dzaro.save;
+
+import com.dzaro.*;
+import com.dzaro.dateBase.DateBaseCon;
+import com.dzaro.dateBase.MealDAO;
+import com.dzaro.dateBase.PlanDAO;
+import com.dzaro.plan.DailyPlan;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.time.DayOfWeek;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 
-public class FileOperation extends DateBaseCon  {
+public class FileOperation extends DateBaseCon {
     MealDAO mealDAO = new MealDAO();
     PlanDAO planDAO = new PlanDAO();
     SavePlan savePlan = new SavePlan();
-    UserAnswer userAnswer = new UserAnswer();
+    UserInputHandler userInputHandler = new UserInputHandler();
     //String filePath;
     String fileName;
 
@@ -24,7 +29,7 @@ public class FileOperation extends DateBaseCon  {
             System.out.println("Unable to save. Plan your meals first.");
         } else {
             System.out.println("Input a filename:");
-            String fileName = userAnswer.userAnswerString();
+            String fileName = userInputHandler.userAnswerString();
             createFile(fileName);
             savePlanFile();
         }

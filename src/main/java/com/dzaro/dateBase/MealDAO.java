@@ -1,13 +1,14 @@
-package com.dzaro;
+package com.dzaro.dateBase;
+
+import com.dzaro.Meal;
+import com.dzaro.dateBase.DateBaseCon;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 // Data Access Object
 // Inserty, Selecty itp.
@@ -75,7 +76,7 @@ public class MealDAO extends DateBaseCon {
         //System.out.println(this.meal_id);
     }
 
-    public void addMealAndIngriedientsForDB(Meal meal) {
+    public void saveMeal(Meal meal) {
         try {
             addMeal(meal.getCategory(), meal.getNameMeal(), meal.getIngredients());
         } catch (SQLException e) {

@@ -1,10 +1,13 @@
-package com.dzaro;
+package com.dzaro.dateBase;
+
+import com.dzaro.Category;
+import com.dzaro.UserInputHandler;
 
 import java.sql.*;
 import java.util.*;
 
 
-class DateBaseCon {
+public class DateBaseCon {
     private static String sql = "mealTest";
     private static final String DB_URL = "jdbc:postgresql:" + sql; // main db = meals_db    test db = mealTest : copyMeals_db
     private static final String USER = "postgres";
@@ -14,7 +17,7 @@ class DateBaseCon {
 
     Connection connection;
     Statement statement;
-    private UserAnswer userAnswer = new UserAnswer();
+    private UserInputHandler userInputHandler = new UserInputHandler();
 
     public DateBaseCon()  {
         try {
@@ -34,7 +37,7 @@ class DateBaseCon {
             e.printStackTrace();
         }
     }
-    public void createAllTable() {
+    public void createTables() {
         try {
             statement.executeUpdate("CREATE TABLE meals (" +
                     "meal_id serial NOT NULL PRIMARY KEY," +
@@ -88,7 +91,7 @@ class DateBaseCon {
         // checking if ResultSet is empty
         if (resultset.next() == false) {
             deleteAllTable();
-            createAllTable();
+            createTables();
             this.meal_id = 1;
         } else {
             int mealIDSelect = 0;

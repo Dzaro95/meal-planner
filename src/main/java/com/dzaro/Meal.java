@@ -10,7 +10,7 @@ public class Meal {
     private final List<String> ingredients;
 
     // Ten konstruktor używasz kiedy pobierasz posiłek z bazy danych
-    Meal(
+    public Meal(
             Integer id,
             String category,
             String name,
@@ -23,7 +23,7 @@ public class Meal {
     }
 
     // Tan konstruktor używasz kiedy tworzysz nowy posiłek
-    Meal(
+    public Meal(
             String category,
             String name,
             List<String> ingredients
