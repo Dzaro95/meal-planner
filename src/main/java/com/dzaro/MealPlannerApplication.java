@@ -4,18 +4,18 @@ import com.dzaro.add.AddMealUseCase;
 import com.dzaro.add.SetMealUseCase;
 import com.dzaro.dateBase.DateBaseCon;
 import com.dzaro.dateBase.MealDAO;
-import com.dzaro.plan.PlanInterface;
+import com.dzaro.plan.Plan;
 import com.dzaro.save.FileOperation;
-import com.dzaro.show.ShowCategoryInterface;
+import com.dzaro.show.ShowCategory;
 
-public class MainProgram {
+public class MealPlannerApplication {
     public static void startProgram() {
         AddMealUseCase addMealUseCase = new AddMealUseCase();
         SetMealUseCase addMeal;
-        ShowCategoryInterface showCategoryInterface = new ShowCategoryInterface();
+        ShowCategory showCategory = new ShowCategory();
         UserInputHandler userInputHandler = new UserInputHandler();
         MealDAO mealDAO = new MealDAO();
-        PlanInterface planInterface = new PlanInterface();
+        Plan plan = new Plan();
         DateBaseCon dbCon = new DateBaseCon();
         FileOperation fileOperation;
         boolean loop = true;
@@ -33,10 +33,10 @@ public class MainProgram {
                     addMealUseCase.start();
                     break;
                 case ("show"):
-                    showCategoryInterface.start();
+                    showCategory.start();
                     break;
                 case ("plan"):
-                    planInterface.start();
+                    plan.start();
                     break;
                 case ("save"):
                     try {

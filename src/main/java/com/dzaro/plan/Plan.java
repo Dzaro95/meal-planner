@@ -3,7 +3,7 @@ package com.dzaro.plan;
 import com.dzaro.dateBase.DateBaseCon;
 import com.dzaro.dateBase.PlanDAO;
 
-public class PlanInterface {
+public class Plan {
     DateBaseCon dbCon = new DateBaseCon();
     SetPlan setPlan = new SetPlan();
     PlanDAO planDAO = new PlanDAO();

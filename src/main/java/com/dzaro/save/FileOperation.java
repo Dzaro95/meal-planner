@@ -18,7 +18,7 @@ import java.util.Map;
 public class FileOperation extends DateBaseCon {
     MealDAO mealDAO = new MealDAO();
     PlanDAO planDAO = new PlanDAO();
-    SavePlan savePlan = new SavePlan();
+    WeeklyPlan weeklyPlan = new WeeklyPlan();
     UserInputHandler userInputHandler = new UserInputHandler();
     //String filePath;
     String fileName;
@@ -59,7 +59,7 @@ public class FileOperation extends DateBaseCon {
     public void savePlanFile() throws SQLException {
         File file = new File(fileName);
         try (PrintWriter printWriter = new PrintWriter(file)) {
-            Map<DayOfWeek, List<DailyPlan>> fullPlan = savePlan.getSavePlan();
+            Map<DayOfWeek, List<DailyPlan>> fullPlan = weeklyPlan.getSavePlan();
             for (DayOfWeek day : DayOfWeek.values()) {
                 printWriter.println(UpperFirstLetter.upper(day.toString()));
                 printWriter.println();

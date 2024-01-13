@@ -9,19 +9,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SavePlan {
+public class WeeklyPlan {
     PlanDAO planDAO = new PlanDAO();
-    private Map<DayOfWeek, List<DailyPlan>> savePlan = new HashMap<>();
+    private final Map<DayOfWeek, DailyPlan> weeklyPlan = new HashMap<>();
 
 
     public Map<DayOfWeek, List<DailyPlan>> getSavePlan() {
         try {
             for (DayOfWeek day : DayOfWeek.values()) {
-                this.savePlan.put(day, planDAO.getPlanForDay(day));
+                this.weeklyPlan.put(day, planDAO.getPlanForDay(day));
             }
         } catch(SQLException e) {
             e.printStackTrace();
         }
-        return this.savePlan;
+        return this.weeklyPlan;
     }
 }

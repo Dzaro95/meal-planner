@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShowCategoryInterface {
+public class ShowCategory {
     UserInputHandler userInputHandler = new UserInputHandler();
     MealDAO mealDAO = new MealDAO();
     PlanDAO planDAO = new PlanDAO();
